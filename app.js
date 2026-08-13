@@ -1,4 +1,6 @@
 <script>
+
+  // CONFIG
   const AVWX_API_KEY = "ersegQzkf2Dfal-o26B4b5uzMrXBeHK2jOpOaY7nffc";
   const AIRLABS_KEY = "YOUR_AIRLABS_KEY";
 
@@ -32,6 +34,7 @@
     };
   }
 
+  // DONNEES
   const airports = {
     EBCI: {
       icao: "EBCI",
@@ -240,6 +243,7 @@
     return diff > 0 ? +1 : -1;
   }
 
+  // OUTILS
   function dmsToDecimal(dmsStr) {
     const parts = dmsStr.trim().split(/\s+/);
     const deg = parseFloat(parts[0]);
@@ -314,6 +318,7 @@
     return { dist: Math.sqrt(dx * dx + dy * dy), t };
   }
 
+  // CARTE
   const map = L.map("map").setView([50.55, 5.0], 9);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 18,
@@ -465,6 +470,7 @@ function resetMapView() {
     });
   }
 
+  // API
   async function fetchMetar(icao) {
     const url = buildMetarUrl(icao);
     const res = await fetch(url);
@@ -510,6 +516,7 @@ function resetMapView() {
     return best;
   }
 
+  // FILTRES
   function filterFlightsAirlabsForNoise(airportKey, flights) {
     
     const typeFilter = (document.getElementById("filter-aircraft").value || "").trim().toUpperCase();
@@ -951,6 +958,7 @@ function resetMapView() {
     });
   }
 
+  // TIMELINE
   function startTimeline() {
     if (timelineTimer) return;
     timelineTimer = setInterval(() => {
@@ -1096,6 +1104,7 @@ function resetMapView() {
     onFlightSelected(airportKey, key, kind);
   });
 
+  // TRAITEMENTS
   async function processAirport(airportKey) {
     const ap = airports[airportKey];
 
@@ -1124,6 +1133,7 @@ function resetMapView() {
         fetchFlightsAirlabs(ap.icao)
       ]);
 
+      // AFFICHAGE
       updateMetarUI(airportKey, metar);
       updateFlightsUI(airportKey, flights);
 
@@ -1234,11 +1244,13 @@ function resetMapView() {
 
     await Promise.all([processAirport("EBCI"), processAirport("EBLG")]);
   }
-  
+
+// EVENEMENTS
 document
   .getElementById("btn-reset-zoom")
   .addEventListener("click", resetMapView);
-  
+
+// DEMARRAGE
    refreshAll();
 
 setTimeout(() => {
