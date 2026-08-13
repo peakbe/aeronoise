@@ -3,20 +3,20 @@
   const AIRLABS_KEY = "04cb1c09-8abb-468a-95fa-ee90c3c2b651";
 
   function buildMetarUrl(icao) {
-    return `https://avwx.rest/api/metar/${icao}?token=${AVWX_API_KEY}&format=json`;
-  }
+  return `https://avwx.rest/api/metar/${icao}?token=${AVWX_API_KEY}&format=json`;
+}
 
-  function buildAirlabsFlightsUrl(icao) {
-    return `https://airlabs.co/api/v9/flights?api_key=${AIRLABS_KEY}&dep_icao=${icao}`;
-  }
+ function buildAirlabsFlightsUrl(icao) {
+  return `https://airlabs.co/api/v9/flights?api_key=${AIRLABS_KEY}&dep_icao=${icao}`;
+}
 
-  function buildAirlabsArrivalsUrl(icao) {
-    return `https://airlabs.co/api/v9/flights?api_key=${AIRLABS_KEY}&arr_icao=${icao}`;
-  }
+function buildAirlabsArrivalsUrl(icao) {
+  return `https://airlabs.co/api/v9/flights?api_key=${AIRLABS_KEY}&arr_icao=${icao}`;
+}
 
-  function buildAirlabsSchedulesUrl(icao) {
-    return `https://airlabs.co/api/v9/schedules?api_key=${AIRLABS_KEY}&dep_icao=${icao}`;
-  }
+function buildAirlabsSchedulesUrl(icao) {
+  return `https://airlabs.co/api/v9/schedules?api_key=${AIRLABS_KEY}&dep_icao=${icao}`;
+}
 
   async function fetchFlightsAirlabs(icao) {
     const [liveDep, liveArr, schedDep] = await Promise.all([
@@ -515,22 +515,15 @@ function resetMapView() {
   }
 
   // FILTRES
- function filterFlightsAirlabsForNoise(airportKey, flights) {
+function filterFlightsAirlabsForNoise(airportKey, flights) {
 
-  const all = [
+  return [
     ...flights.liveDep.map(f => ({ ...f, _kind: "liveDep" })),
     ...flights.liveArr.map(f => ({ ...f, _kind: "liveArr" })),
     ...flights.schedDep.map(f => ({ ...f, _kind: "schedDep" }))
-  ];
+  ].filter(Boolean);
 
-  return all.filter(f => f);
 }
-
-         return true;
-    });
-
-    return filtered;
-  }
   
   function extractRunwayFromAirlabs(airportKey, flights) {
     const ap = airports[airportKey];
