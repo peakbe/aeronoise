@@ -10,138 +10,12 @@
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    header {
-      padding: 0.5rem 1rem;
-      background: #111827;
-      color: #f9fafb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    main {
-      display: grid;
-      grid-template-columns: minmax(280px, 360px) 1fr;
-      flex: 1;
-      min-height: 0;
-    }
-    #sidebar {
-      border-right: 1px solid #e5e7eb;
-      padding: 0.75rem;
-      overflow-y: auto;
-      font-size: 0.85rem;
-    }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-    .block {
-      margin-bottom: 0.75rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    .block:last-child {
-      border-bottom: none;
-    }
-    .block h2 {
-      margin: 0 0 0.25rem 0;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #111827;
-    }
-    .metar {
-      font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 0.8rem;
-      background: #f9fafb;
-      border-radius: 4px;
-      padding: 0.35rem 0.5rem;
-      margin-top: 0.25rem;
-      white-space: pre-wrap;
-    }
-    .small {
-      font-size: 0.75rem;
-      color: #6b7280;
-    }
-    .tag {
-      display: inline-block;
-      padding: 0.1rem 0.35rem;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      margin-right: 0.25rem;
-      margin-top: 0.15rem;
-      background: #e5e7eb;
-      color: #111827;
-    }
-    .tag.impacted {
-      background: #b91c1c;
-      color: #f9fafb;
-    }
-    .legend {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      font-size: 0.75rem;
-      margin-top: 0.25rem;
-      flex-wrap: wrap;
-    }
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      display: inline-block;
-    }
-    .dot-impacted { background: #b91c1c; }
-    .dot-normal { background: #2563eb; }
-    .dot-airport { background: #10b981; }
-    .dot-track { background: #f97316; }
-    .dot-zone04 { background: #22c55e; }
-    .dot-zone22 { background: #f97316; }
-    .dot-sidstar { background: #6366f1; }
-    .dot-dep { background: #f97316; }
-    .dot-arr { background: #0ea5e9; }
-    .filters label {
-      display: block;
-      margin-bottom: 0.25rem;
-    }
-    .filters input[type="checkbox"] {
-      margin-right: 0.25rem;
-    }
-    .filters select,
-    .filters input[type="number"],
-    .filters input[type="text"] {
-      width: 100%;
-      box-sizing: border-box;
-      margin-top: 0.15rem;
-      margin-bottom: 0.35rem;
-      padding: 0.15rem 0.25rem;
-      font-size: 0.8rem;
-    }
-    button {
-      font-size: 0.8rem;
-      padding: 0.25rem 0.5rem;
-      cursor: pointer;
-    }
-    .flight-row {
-      cursor: pointer;
-      padding: 2px 0;
-    }
-    .flight-row:hover {
-      background: #f3f4f6;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.cssRemplacer les styles inline
+
+Remplacer :
+
+```html
+<div style="margin-top:0.5rem;">
 </head>
 <body>
 <header>
@@ -257,7 +131,7 @@
       <div id="selected-flight-info" class="small">
         Aucun vol sélectionné.
       </div>
-      <div id="selected-flight-sonos" class="small" style="margin-top:0.35rem;">
+      <div id="selected-flight-sonos" class="small mt-035">
       </div>
     </div>
 
