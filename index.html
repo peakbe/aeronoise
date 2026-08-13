@@ -10,11 +10,7 @@
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
-  <link rel="stylesheet" href="styles.cssRemplacer les styles inline
-
-Remplacer :
-
-```html
+  <link rel="stylesheet" href="styles.css
 <div style="margin-top:0.5rem;">
 </head>
 <body>
@@ -29,26 +25,38 @@ Remplacer :
   <section id="sidebar">
     <div class="block">
       <h2>Filtres</h2>
-      <div class="filters">
-        <label>
-          <input type="checkbox" id="filter-ebci" checked />
-          Afficher / analyser EBCI (Charleroi)
-        </label>
-        <label>
-          <input type="checkbox" id="filter-eblg" checked />
-          Afficher / analyser EBLG (Liège)
-        </label>
+     
+     <div class="filters">
 
-        <label>
-          Type d’avion (IATA/ICAO, contient) :
-          <input type="text" id="filter-aircraft" placeholder="ex: B738, A320 (vide = tous)" />
-        </label>
+  <label>
+    <input type="checkbox" id="filter-ebci" checked />
+    Afficher / analyser EBCI (Charleroi)
+  </label>
 
+  <label>
+    <input type="checkbox" id="filter-eblg" checked />
+    Afficher / analyser EBLG (Liège)
+  </label>
+
+  <label>
+    Type d’avion (IATA/ICAO, contient) :
+    <input
+      type="text"
+      id="filter-aircraft"
+      placeholder="ex: B738, A320 (vide = tous)"
+    />
+  </label>
+
+  <button id="btn-reset-zoom">
+    🗺️ Recentrer la carte
+  </button>
+
+</div>
         <label>
           Fenêtre de temps (heures en arrière, vols “récents”) :
           <input type="number" id="filter-hours" min="1" max="24" value="3" />
         </label>
-
+        
         </div>
 
     <div class="block">
@@ -58,7 +66,7 @@ Remplacer :
         <div class="small" id="meteo-ebci-summary">Chargement...</div>
         <div class="metar" id="meteo-ebci-raw"></div>
       </div>
-      <div style="margin-top:0.5rem;">
+      <div class="mt-05">
         <strong>EBLG – Liège</strong>
         <div class="small" id="meteo-eblg-summary">Chargement...</div>
         <div class="metar" id="meteo-eblg-raw"></div>
@@ -71,7 +79,7 @@ Remplacer :
         <strong>EBCI</strong>
         <div class="small" id="runway-ebci">Analyse en cours...</div>
       </div>
-      <div style="margin-top:0.35rem;">
+      <div class="mt-035">
         <strong>EBLG</strong>
         <div class="small" id="runway-eblg">Analyse en cours...</div>
       </div>
@@ -94,7 +102,7 @@ Remplacer :
         <strong>EBCI</strong>
         <div id="list-ebci" class="small">En attente de données...</div>
       </div>
-      <div style="margin-top:0.35rem;">
+      <div class="mt-035">
         <strong>EBLG</strong>
         <div id="list-eblg" class="small">En attente de données...</div>
       </div>
@@ -106,7 +114,7 @@ Remplacer :
         <strong>EBCI</strong>
         <div id="flights-ebci" class="small">Chargement...</div>
       </div>
-      <div style="margin-top:0.35rem;">
+      <div class="mt-035">
         <strong>EBLG</strong>
         <div id="flights-eblg" class="small">Chargement...</div>
       </div>
@@ -682,11 +690,6 @@ Remplacer :
 
     return filtered;
   }
-
-  // Ajouter un bouton « Reset Zoom »
- <button id="🗺️ Recentrer la carte">
-  Reset zoom carte
-</button>
   
   function extractRunwayFromAirlabs(airportKey, flights) {
     const ap = airports[airportKey];
