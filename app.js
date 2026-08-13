@@ -517,24 +517,16 @@ function resetMapView() {
   }
 
   // FILTRES
-  function filterFlightsAirlabsForNoise(airportKey, flights) {
-    
-    const typeFilter = (document.getElementById("filter-aircraft").value || "").trim().toUpperCase();
-    
+ function filterFlightsAirlabsForNoise(airportKey, flights) {
 
-    const all = [
-      ...flights.liveDep.map(f => ({ ...f, _kind: "liveDep" })),
-      ...flights.liveArr.map(f => ({ ...f, _kind: "liveArr" })),
-      ...flights.schedDep.map(f => ({ ...f, _kind: "schedDep" }))
-    ];
+  const all = [
+    ...flights.liveDep.map(f => ({ ...f, _kind: "liveDep" })),
+    ...flights.liveArr.map(f => ({ ...f, _kind: "liveArr" })),
+    ...flights.schedDep.map(f => ({ ...f, _kind: "schedDep" }))
+  ];
 
-    const filtered = all.filter(f => {
-      if (!f) return false;
-
-      if (typeFilter) {
-        const ac = (f.aircraft_icao || f.aircraft_iata || "").toUpperCase();
-        if (!ac.includes(typeFilter)) return false;
-      }
+  return all.filter(f => f);
+}
 
          return true;
     });
@@ -584,7 +576,7 @@ function resetMapView() {
 
     const filtered = filterFlightsAirlabsForNoise(airportKey, flights);
     if (!filtered.length) {
-      el.textContent = "Aucun vol récent dans la fenêtre choisie.";
+      el.textContent = "Aucun vol disponible.";
       return;
     }
 
