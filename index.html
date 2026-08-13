@@ -49,12 +49,7 @@ Remplacer :
           <input type="number" id="filter-hours" min="1" max="24" value="3" />
         </label>
 
-        <button id="btn-refresh">Rafraîchir données</button>
-      </div>
-      <div class="small">
-        AirLabs : vols du jour (départs + arrivées), filtrés par type avion & fenêtre temporelle.
-      </div>
-    </div>
+        </div>
 
     <div class="block">
       <h2>Météo du jour</h2>
@@ -569,6 +564,10 @@ Remplacer :
     });
   }
 
+  setTimeout(() => {
+  resetMapView();
+}, 500);
+  
   function buildSidStar() {
     buildProceduresFromAIP();
 
@@ -651,7 +650,7 @@ Remplacer :
   }
 
   function filterFlightsAirlabsForNoise(airportKey, flights) {
-    const hoursBack = parseInt(document.getElementById("filter-hours").value || "3", 10);
+    
     const typeFilter = (document.getElementById("filter-aircraft").value || "").trim().toUpperCase();
     const now = Date.now();
 
@@ -669,6 +668,7 @@ Remplacer :
         if (!ac.includes(typeFilter)) return false;
       }
 
+        
       const t = f.dep_actual || f.dep_estimated || f.dep_time || f.dep_time_utc ||
                 f.arr_actual || f.arr_estimated || f.arr_time || f.arr_time_utc;
       if (t) {
@@ -683,6 +683,11 @@ Remplacer :
     return filtered;
   }
 
+  // Ajouter un bouton « Reset Zoom »
+ <button id="🗺️ Recentrer la carte">
+  Reset zoom carte
+</button>
+  
   function extractRunwayFromAirlabs(airportKey, flights) {
     const ap = airports[airportKey];
     const filtered = filterFlightsAirlabsForNoise(airportKey, flights);
@@ -927,6 +932,26 @@ Remplacer :
       return;
     }
 
+    function resetMapView() {
+  const group = [];
+
+  Object.values(airportMarkers).forEach(m => {
+    group.push(m.getLatLng());
+  });
+
+  ["EBCI", "EBLG"].forEach(k => {
+    sonometerMarkers[k].forEach(s => {
+      group.push([s.lat, s.lon]);
+    });
+  });
+
+  map.fitBounds(group, {
+    padding: [30, 30]
+  });
+}
+  document
+  .getElementById("btn-reset-zoom")
+  .addEventListener("click", resetMapView);  
     container.innerHTML =
       `Piste : <strong>${runway.name}</strong> (trapèze 20 km, largeur dynamique)<br>` +
       impacted
