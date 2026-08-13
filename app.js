@@ -319,9 +319,9 @@ function buildAirlabsSchedulesUrl(icao) {
   // CARTE
   const map = L.map("map").setView([50.55, 5.0], 9);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 18,
-    attribution: "&copy; OpenStreetMap contributors"
-  }).addTo(map);
+  maxZoom: 18,
+  attribution: "&copy; OpenStreetMap contributors"
+}).addTo(map);
 
   const airportMarkers = {};
   const sonometerMarkers = { EBCI: [], EBLG: [] };
@@ -1239,5 +1239,3 @@ document
 setTimeout(() => {
   resetMapView();
 }, 500);
-  
-</script>
