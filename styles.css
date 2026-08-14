@@ -416,3 +416,64 @@ button {
   font-size: 14px;
   color: #10b981; /* vert Airbus */
 }
+/* --- ROSE DES VENTS AIRBUS ND --- */
+
+.wind-rose {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 10px auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at center,
+    #0b1120 0%,
+    #020617 40%,
+    #0b1120 100%);
+  border: 2px solid #1f2937;
+  box-shadow: 0 0 12px rgba(0,0,0,0.6) inset;
+}
+
+/* Flèche vent moyen */
+.wind-arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  font-size: 22px;
+  color: #38bdf8; /* bleu Airbus */
+  text-shadow: 0 0 4px #000;
+}
+
+/* Flèche rafales */
+.wind-gust-arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 50px;
+  transform-origin: bottom center;
+  border-radius: 3px;
+  opacity: 0;
+  box-shadow: 0 0 6px rgba(0,0,0,0.6);
+}
+
+/* Tag rafales GxxKT */
+.wind-gust-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f97316;
+  text-shadow: 0 0 4px #000;
+}
+
+/* Tag direction moyenne */
+.wind-avg-tag {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #22c55e; /* vert Airbus */
+  text-shadow: 0 0 4px #000;
+}
