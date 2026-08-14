@@ -584,6 +584,15 @@ function updateWeatherDetails(airportKey, metar) {
   const windSpeedMs = windSpeed != null ? (windSpeed * 0.514444).toFixed(1) : null;
 
   const gustColor = classifyGustColor(windGust);
+const avgTag = document.getElementById(
+  airportKey === "EBCI"
+    ? "wind-avg-tag-ebci"
+    : "wind-avg-tag-eblg"
+);
+
+if (avgTag && avgDir != null) {
+  avgTag.textContent = `${avgDir}°`;
+}
 
 const gustArrow = document.getElementById(
   airportKey === "EBCI"
