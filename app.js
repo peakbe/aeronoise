@@ -985,14 +985,18 @@ const DISPLAY_RULES = {
     }
 
     if (usedFixedRule) {
-      container.innerHTML =
-        `Piste : <strong>${runway.name}</strong> (règles fixes sonomètres)<br>` +
-        impacted
-          .map(s =>
-            `<span class="tag impacted">${s.id}</span> ` +
-            `<span class="small">${s.address}</span>`
-          )
-          .join("<br>");
+     const impactedIds =
+  new Set(
+    impacted.map(s => s.id)
+  );
+
+const sorted =
+  [...sonometerMarkers[airportKey]]
+    .sort((a,b) =>
+      Number(impactedIds.has(b.id))
+      -
+      Number(impactedIds.has(a.id))
+    );
       return;
     }
 
@@ -1020,7 +1024,11 @@ const DISPLAY_RULES = {
       `Piste : <strong>${runway.name}</strong> (trapèze 20 km, largeur dynamique)<br>` +
       impacted
         .map(s =>
-          `<span class="tag impacted">${s.id}</span> ` +
+          `<span style="
+  background:#b91c1c;
+  color:white;
+  padding:2px 6px;
+  border-radius:12px;"> `
           `<span class="small">${s.address} – ${s.distance_m.toFixed(0)} m du couloir</span>`
         )
         .join("<br>");
