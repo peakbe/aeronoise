@@ -613,16 +613,7 @@ function updateWindRose(
 
 function updateWeatherDetails(
 
-  console.log(
-  airportKey,
-  document.getElementById(
-    airportKey === "EBCI"
-      ? "meteo-details-ebci"
-      : "meteo-details-eblg"
-  )
-);
-
-  airportKey,
+   airportKey,
   metar
 ) {
 
