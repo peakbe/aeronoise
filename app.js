@@ -583,6 +583,22 @@ function updateWeatherDetails(airportKey, metar) {
   const windSpeed = metar?.wind_speed?.value ?? metar?.wind?.speed_kt;
   const windSpeedMs = windSpeed != null ? (windSpeed * 0.514444).toFixed(1) : null;
 
+  const gustColor = classifyGustColor(windGust);
+
+const gustArrow = document.getElementById(
+  airportKey === "EBCI"
+    ? "wind-gust-arrow-ebci"
+    : "wind-gust-arrow-eblg"
+);
+
+if (gustArrow && windDir != null && windGust != null) {
+  gustArrow.style.transform =
+    `translate(-50%, -50%) rotate(${windDir}deg)`;
+
+  gustArrow.style.backgroundColor = gustColor;
+  gustArrow.style.opacity = 0.85;
+}
+
   const airport = airports[airportKey];
   const runway = estimateRunwayFromWind(airport, windDir);
 
@@ -638,6 +654,13 @@ const windGustMs =
   windGust != null
     ? (windGust * 0.514444).toFixed(1)
     : null;
+  
+function classifyGustColor(gustKt) {
+  if (gustKt == null) return "#6b7280"; // gris
+  if (gustKt < 20) return "#22c55e";    // vert
+  if (gustKt < 30) return "#f97316";    // orange
+  return "#dc2626";                     // rouge
+}
 
   const temp = metar?.temperature?.value ?? metar?.temperature?.celsius ?? null;
   const qnh = metar?.altimeter?.value ?? metar?.qnh?.hpa ?? null;
