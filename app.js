@@ -991,67 +991,53 @@ const DISPLAY_RULES = {
       `piste ${runway?.name} (cap ~${runway.heading}°) [${source}, vols filtrés: ${flightsCount}].`;
   }
 
-  function updateImpactedListUI(airportKey, impacted, runway, usedFixedRule = false) {
-    const containerId = airportKey === "EBCI" ? "list-ebci" : "list-eblg";
-    const container = document.getElementById(containerId);
-    if (!runway) {
-      container.textContent = "Piste non déterminée (vent calme / données manquantes).";
-      return;
-    }
-    if (impacted.length === 0) {
-      container.textContent = `Aucun sonomètre dans le couloir (piste ${runway?.name}).`;
-      return;
-    }
+ function updateImpactedListUI(airportKey, impacted, runway, usedFixedRule = false) {
+  const containerId = airportKey === "EBCI" ? "list-ebci" : "list-eblg";
+  const container = document.getElementById(containerId);
+  if (!container) return;
 
-    if (usedFixedRule) {
-     const impactedIds =
-  new Set(
-    impacted.map(s => s.id)
-  );
+  // Cas piste non déterminée
+  if (!runway) {
+    container.textContent = "Piste non déterminée (vent calme / données manquantes).";
+    return;
+  }
 
-const sorted =
-  [...sonometerMarkers[airportKey]]
-    .sort((a,b) =>
-      Number(impactedIds.has(b.id))
-      -
-      Number(impactedIds.has(a.id))
-    );
-      return;
-    }
+  // Cas aucun impact
+  if (impacted.length === 0) {
+    container.textContent = `Aucun sonomètre dans le couloir (piste ${runway.name}).`;
+    return;
+  }
 
-    function resetMapView() {
-  const group = [];
-
-  Object.values(airportMarkers).forEach(m => {
-    group.push(m.getLatLng());
-  });
-
-  ["EBCI", "EBLG"].forEach(k => {
-    sonometerMarkers[k].forEach(s => {
-      group.push([s.lat, s.lon]);
-    });
-  });
-
-  map.fitBounds(group, {
-    padding: [30, 30]
-  });
-}
-  document
-  .getElementById("btn-reset-zoom")
-  .addEventListener("click", resetMapView);  
+  // Mode règles fixes
+  if (usedFixedRule) {
     container.innerHTML =
-      `Piste : <strong>${runway?.name}</strong> (trapèze 20 km, largeur dynamique)<br>` +
+      `Piste : <strong>${runway.name}</strong> (règles fixes)<br>` +
       impacted
         .map(s =>
-          `<span style="
-  background:#b91c1c;
-  color:white;
-  padding:2px 6px;
-  border-radius:12px;"> `
-          `<span class="small">${s.address} – ${s.distance_m.toFixed(0)} m du couloir</span>`
+          `<span class="tag impacted">${s.id}</span> ` +
+          `<span class="small">${s.address}</span>`
         )
         .join("<br>");
+    return;
   }
+
+  // Mode corridor dynamique
+  container.innerHTML =
+    `Piste : <strong>${runway.name}</strong> (trapèze 20 km, largeur dynamique)<br>` +
+    impacted
+      .map(s =>
+        `<span style="
+          background:#b91c1c;
+          color:white;
+          padding:2px 6px;
+          border-radius:12px;">
+          ${s.id}
+        </span>
+        <span class="small">${s.address} – ${s.distance_m.toFixed(0)} m du couloir</span>`
+      )
+      .join("<br>");
+}
+
 
   let timelineFlights = [];
   let timelineTimer = null;
