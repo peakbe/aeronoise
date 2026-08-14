@@ -537,3 +537,73 @@ button {
   background: #1e293b;
   border-color: #334155;
 }
+/* --- BARRE ND AIRBUS --- */
+.nd-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #0b1120;
+  border: 2px solid #1f2937;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+}
+
+/* --- TITRE ND --- */
+.nd-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #38bdf8; /* bleu Airbus ND */
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  text-shadow: 0 0 4px #000;
+}
+
+/* --- CONTENEUR DES BOUTONS --- */
+.nd-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+/* --- BOUTONS ND --- */
+.nd-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #0b1120;
+  color: #38bdf8;
+  border: 2px solid #1f2937;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 4px #000;
+  box-shadow:
+    inset 0 0 6px rgba(0,0,0,0.6),
+    0 0 6px rgba(0,0,0,0.4);
+  transition: all 0.15s ease-in-out;
+}
+
+/* --- Icônes EFIS --- */
+.nd-icon {
+  font-size: 16px;
+  color: #38bdf8;
+}
+
+/* --- Effet cockpit “push button” --- */
+.nd-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 0 10px rgba(0,0,0,0.8),
+    0 0 2px rgba(0,0,0,0.3);
+}
+
+/* --- Survol Airbus ND --- */
+.nd-btn:hover {
+  background: #1e293b;
+  border-color: #334155;
+}
