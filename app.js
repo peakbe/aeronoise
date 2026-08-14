@@ -594,6 +594,8 @@ function updateWeatherDetails(airportKey, metar) {
       runwayInfo = `
         <br>🛬 Piste estimée : RWY ${runway.name}
         <br>💨 Vent : ${windSpeed ?? "--"} kt (${windSpeedMs ?? "--"} m/s)
+        ${windGust != null ? `<br>🌬 Rafales : ${windGust} kt (${windGustMs} m/s)` : ""}
+        <br>↕ Vent de face (rafales) : ${comp.headwind + (windGust - windSpeed)} kt
         <br>↔ Vent de travers : ${comp.crosswind} kt
         <br>↕ Vent de face : ${comp.headwind} kt
       `;
@@ -627,14 +629,26 @@ function updateMetarUI(airportKey, metar) {
       ? (windSpeed * 0.514444).toFixed(1)
       : null;
 
+  const windGust =
+  metar?.wind_gust?.value ??
+  metar?.wind?.gust_kt ??
+  null;
+
+const windGustMs =
+  windGust != null
+    ? (windGust * 0.514444).toFixed(1)
+    : null;
+
   const temp = metar?.temperature?.value ?? metar?.temperature?.celsius ?? null;
   const qnh = metar?.altimeter?.value ?? metar?.qnh?.hpa ?? null;
 
-  elSummary.textContent =
-    `Vent: ${windDir != null ? windDir + "°" : "n/a"} | ` +
-    `${windSpeedMs != null ? windSpeedMs + " m/s" : "n/a"} | ` +
-    `T: ${temp != null ? temp + "°C" : "n/a"} | ` +
-    `QNH: ${qnh != null ? qnh + " hPa" : "n/a"}`;
+    elSummary.textContent =
+  `Vent: ${windDir != null ? windDir + "°" : "n/a"} | ` +
+  `${windSpeedMs != null ? windSpeedMs + " m/s" : "n/a"} | ` +
+  `Rafales: ${windGust != null ? windGust + " kt (" + windGustMs + " m/s)" : "n/a"} | ` +
+  `T: ${temp != null ? temp + "°C" : "n/a"} | ` +
+  `QNH: ${qnh != null ? qnh + " hPa" : "n/a"}`;
+
 
   elRaw.textContent = metar?.raw ?? metar?.raw_text ?? "(METAR brut non disponible)";
 
