@@ -408,3 +408,11 @@ button {
   font-weight: 600;
   font-size: 14px;
 }
+.wind-avg-tag {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #10b981; /* vert Airbus */
+}
