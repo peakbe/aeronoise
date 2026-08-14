@@ -259,6 +259,42 @@ function buildAirlabsSchedulesUrl(icao) {
     return d > 180 ? 360 - d : d;
   }
 
+// vent de travers
+function calculateWindComponents(
+  runwayHeading,
+  windDirection,
+  windSpeed
+) {
+
+  if (
+    windDirection == null ||
+    windSpeed == null
+  ) {
+    return null;
+  }
+
+  const angle =
+    (windDirection - runwayHeading) *
+    Math.PI / 180;
+
+  const headwind =
+    Math.round(
+      Math.cos(angle) * windSpeed
+    );
+
+  const crosswind =
+    Math.round(
+      Math.abs(
+        Math.sin(angle) * windSpeed
+      )
+    );
+
+  return {
+    headwind,
+    crosswind
+  };
+}
+
   function computeTurnPoint(lat, lon, headingDeg, distanceKm) {
     const R = 6371;
     const d = distanceKm / R;
@@ -526,10 +562,15 @@ if (!elSummary || !elRaw) {
     } else {
       windCache.EBLG.dir = windDir;
       windCache.EBLG.speed = windSpeed;
-      updateWindRose(
-    airportKey,
-    windDir,
-    windSpeed
+     updateWindRose(
+  airportKey,
+  windDir,
+  windSpeed
+);
+
+updateWeatherDetails(
+  airportKey,
+  metar
 );
     }
   }
@@ -563,6 +604,82 @@ function updateWindRose(
 
   info.textContent =
     `Vent : ${windDir ?? "--"}° / ${windSpeed ?? "--"} kt`;
+}
+
+function updateWeatherDetails(
+  airportKey,
+  metar
+) {
+
+  const el =
+    document.getElementById(
+      airportKey === "EBCI"
+        ? "meteo-details-ebci"
+        : "meteo-details-eblg"
+    );
+
+  if (!el) return;
+
+  const temp =
+    metar?.temperature?.value ??
+    metar?.temperature?.celsius;
+
+  const dew =
+    metar?.dewpoint?.value ??
+    metar?.dewpoint?.celsius;
+
+  const qnh =
+    metar?.altimeter?.value ??
+    metar?.qnh?.hpa;
+
+  const trend =
+    metar?.remarks ??
+    metar?.forecast ??
+    "Aucune";
+
+  const windDir =
+    metar?.wind_direction?.value ??
+    metar?.wind?.direction?.degrees;
+
+  const windSpeed =
+    metar?.wind_speed?.value ??
+    metar?.wind?.speed_kt;
+
+  const airport = airports[airportKey];
+  const runway =
+    estimateRunwayFromWind(
+      airport,
+      windDir
+    );
+
+  let runwayInfo = "";
+
+  if (runway) {
+
+    const comp =
+      calculateWindComponents(
+        runway.heading,
+        windDir,
+        windSpeed
+      );
+
+    if (comp) {
+
+      runwayInfo = `
+        <br>Vent de travers RWY ${runway.name} :
+        ${comp.crosswind} kt
+        <br>Vent de face RWY ${runway.name} :
+        ${comp.headwind} kt
+      `;
+    }
+  }
+
+  el.innerHTML =
+    `Température : ${temp ?? "--"} °C
+     <br>Point de rosée : ${dew ?? "--"} °C
+     <br>QNH : ${qnh ?? "--"} hPa
+     ${runwayInfo}
+     <br>Tendance : ${trend}`;
 }
 
   function estimateRunwayFromWind(airport, windDirDeg) {
