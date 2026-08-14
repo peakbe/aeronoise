@@ -598,6 +598,23 @@ if (gustArrow && windDir != null && windGust != null) {
   gustArrow.style.backgroundColor = gustColor;
   gustArrow.style.opacity = 0.85;
 }
+  
+${windGust != null ? `
+  <br>🌬 Rafales :
+  <span style="color:${classifyGustColor(windGust)};">
+    ${windGust} kt (${windGustMs} m/s)
+  </span>
+` : ""}
+const gustTag = document.getElementById(
+  airportKey === "EBCI"
+    ? "wind-gust-tag-ebci"
+    : "wind-gust-tag-eblg"
+);
+
+if (gustTag && windGust != null) {
+  gustTag.textContent = `G${windGust}KT`;
+  gustTag.style.color = gustColor;
+}
 
   const airport = airports[airportKey];
   const runway = estimateRunwayFromWind(airport, windDir);
