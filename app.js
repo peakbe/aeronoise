@@ -622,8 +622,7 @@ function updateWindRose(
 }
 
 function updateWeatherDetails(
-
-   airportKey,
+  airportKey,
   metar
 ) {
 
@@ -636,74 +635,14 @@ function updateWeatherDetails(
 
   if (!el) return;
 
-  const temp =
-    metar?.temperature?.value ??
-    metar?.temperature?.celsius;
-
-  const dew =
-    metar?.dewpoint?.value ??
-    metar?.dewpoint?.celsius;
-
-  const qnh =
-    metar?.altimeter?.value ??
-    metar?.qnh?.hpa;
-
-  const trend =
-    metar?.remarks ??
-    metar?.forecast ??
-    "Aucune";
-
-  const windDir =
-    metar?.wind_direction?.value ??
-    metar?.wind?.direction?.degrees;
-
-  const windSpeed =
-    metar?.wind_speed?.value ??
-    metar?.wind?.speed_kt;
-
-  const windSpeedMs =
-    windSpeed != null
-      ? (windSpeed * 0.514444).toFixed(1)
-      : null;
-
-  const airport = airports[airportKey];
-
-  const runway =
-    estimateRunwayFromWind(
-      airport,
-      windDir
-    );
-
-  let runwayInfo = "";
-
-  if (runway) {
-
-    const comp =
-      calculateWindComponents(
-        runway.heading,
-        windDir,
-        windSpeed
-      );
-
-    if (comp) {
-
-      runwayInfo = `
-        <br>🛬 Piste estimée : RWY ${runway.name}
-        <br>💨 Vent : ${windSpeed ?? "--"} kt (${windSpeedMs ?? "--"} m/s)
-        <br>↔ Vent de travers : ${comp.crosswind} kt
-        <br>↕ Vent de face : ${comp.headwind} kt
-      `;
-    }
-  }
-
-  el.innerHTML = `
-    <strong>Conditions actuelles</strong>
-    <br>🌡 Température : ${temp ?? "--"} °C
-    <br>💧 Point de rosée : ${dew ?? "--"} °C
-    <br>📈 QNH : ${qnh ?? "--"} hPa
-    ${runwayInfo}
-    <br>📝 Tendance : ${trend}
-  `;
+  el.innerHTML =
+    `
+      Température :
+      ${metar?.temperature?.value ?? "-"} °C
+      <br>
+      QNH :
+      ${metar?.altimeter?.value ?? "-"} hPa
+    `;
 }
 
   function estimateRunwayFromWind(airport, windDirDeg) {
