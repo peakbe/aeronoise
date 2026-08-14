@@ -540,14 +540,19 @@ if (!elSummary || !elRaw) {
 
     const windDir = metar?.wind_direction?.value ?? metar?.wind?.direction?.degrees ?? null;
     const windSpeed = metar?.wind_speed?.value ?? metar?.wind?.speed_kt ?? null;
+    const windSpeedMs =
+  windSpeed != null
+    ? (windSpeed * 0.514444).toFixed(1)
+    : null;
+    
     const temp = metar?.temperature?.value ?? metar?.temperature?.celsius ?? null;
     const qnh = metar?.altimeter?.value ?? metar?.qnh?.hpa ?? null;
 
     elSummary.textContent =
-      `Vent: ${windDir != null ? windDir + "°" : "n/a"} / ` +
-      `${windSpeed != null ? windSpeed + " kt" : "n/a"} – ` +
-      `T: ${temp != null ? temp + "°C" : "n/a"} – ` +
-      `QNH: ${qnh != null ? qnh + " hPa" : "n/a"}`;
+  `Vent: ${windDir != null ? windDir + "°" : "n/a"} | ` +
+  `${windSpeedMs != null ? windSpeedMs + " m/s" : "n/a"} | ` +
+  `T: ${temp != null ? temp + "°C" : "n/a"} | ` +
+  `QNH: ${qnh != null ? qnh + " hPa" : "n/a"}`;
 
     elRaw.textContent = metar?.raw ?? metar?.raw_text ?? "(METAR brut non disponible)";
 
