@@ -1303,3 +1303,11 @@ document
 setTimeout(() => {
   resetMapView();
 }, 500);
+
+refreshAll();
+
+// Forcer le rafraîchissement de la carte
+setTimeout(() => {
+  map.invalidateSize();
+  resetMapView();
+}, 600);
