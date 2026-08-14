@@ -333,6 +333,7 @@ function buildAirlabsSchedulesUrl(icao) {
   const airportStyle = { radius: 7, color: "#065f46", fillColor: "#10b981", fillOpacity: 0.9 };
   const sonometerNormalStyle = { radius: 5, color: "#1d4ed8", fillColor: "#2563eb", fillOpacity: 0.9 };
   const sonometerImpactedStyle = { radius: 6, color: "#7f1d1d", fillColor: "#b91c1c", fillOpacity: 0.95 };
+  const sonometerGreenStyle = { radius: 6, color: "#166534", fillColor: "#22c55e", fillOpacity: 0.95 };
 
   Object.values(airports).forEach(ap => {
     const m = L.circleMarker([ap.lat, ap.lon], airportStyle)
@@ -372,7 +373,21 @@ function resetMapView() {
     padding: [30, 30]
   });
 }
-  
+
+function applyDisplayRules(airportKey, runwayName) {
+  const rules = DISPLAY_RULES?.[airportKey]?.[runwayName];
+  if (!rules) return;
+  sonometerMarkers[airportKey].forEach(s => {
+    if (rules.green.includes(s.id)) {
+      s.marker.setStyle(sonometerGreenStyle);
+    } else if (rules.red.includes(s.id)) {
+      s.marker.setStyle(sonometerImpactedStyle);
+    } else {
+      s.marker.setStyle(sonometerNormalStyle);
+    }
+  });
+
+}
   function buildEBLGZones() {
     const ap = airports.EBLG;
 
@@ -1178,7 +1193,11 @@ const DISPLAY_RULES = {
       }
 
       updateRunwayUI(airportKey, runway, windDir, windSpeed, source, flightsFiltered.length);
-
+      applyDisplayRules(
+  airportKey,
+  runway.name
+);
+      
       if (runway) {
         let mode = "DEP";
         if (flightsFiltered.some(f => f._kind === "liveArr")) mode = "ARR";
@@ -1229,7 +1248,7 @@ const DISPLAY_RULES = {
         }
 
         if (!usedFixedRule) {
-          impacted = computeImpactedSonometersCorridor(airportKey, runway.heading);
+          impacted = [];
         }
 
         updateImpactedListUI(airportKey, impacted, runway, usedFixedRule);
