@@ -545,35 +545,67 @@ async function fetchMetar(icao) {
   return res.json();
 }
 
-function updateWindRose(airportKey, windDir, windSpeed) {
+function updateWindRose(airportKey, windDir, windSpeed, windGust, isVRB, avgDir) {
+
   const arrow = document.getElementById(
     airportKey === "EBCI" ? "wind-arrow-ebci" : "wind-arrow-eblg"
   );
 
-  const info = document.getElementById(
-    airportKey === "EBCI" ? "wind-info-ebci" : "wind-info-eblg"
+  const gustArrow = document.getElementById(
+    airportKey === "EBCI" ? "wind-gust-arrow-ebci" : "wind-gust-arrow-eblg"
   );
 
-  if (!arrow || !info) {
-    return;
-  }
+  const gustTag = document.getElementById(
+    airportKey === "EBCI" ? "wind-gust-tag-ebci" : "wind-gust-tag-eblg"
+  );
 
+  const avgTag = document.getElementById(
+    airportKey === "EBCI" ? "wind-avg-tag-ebci" : "wind-avg-tag-eblg"
+  );
+
+  if (!arrow) return;
+
+  // --- Vent moyen ---
   arrow.style.transform =
     `translate(-50%, -50%) rotate(${windDir || 0}deg)`;
 
-  info.textContent =
-    `Vent : ${windDir ?? "--"}° / ${windSpeed ?? "--"} kt`;
+  // VRB → flèche pointillée
+  if (isVRB) {
+    arrow.style.border = "2px dashed #f59e0b";
+  } else {
+    arrow.style.border = "none";
+  }
+
+  // --- Rafales ---
+  if (gustArrow && windGust != null) {
+    const gustColor = classifyGustColor(windGust);
+    gustArrow.style.transform =
+      `translate(-50%, -50%) rotate(${windDir}deg)`;
+    gustArrow.style.backgroundColor = gustColor;
+    gustArrow.style.opacity = 0.85;
+  }
+
+  // --- Tag GxxKT ---
+  if (gustTag && windGust != null) {
+    const gustColor = classifyGustColor(windGust);
+    gustTag.textContent = `G${windGust}KT`;
+    gustTag.style.color = gustColor;
+  }
+
+  // --- Direction moyenne ---
+  if (avgTag && avgDir != null) {
+    avgTag.textContent = `${avgDir}°`;
+  }
 }
 
 function updateWeatherDetails(airportKey, metar) {
-  const el = document.getElementById(
-    airportKey === "EBCI"
-      ? "meteo-details-ebci"
-      : "meteo-details-eblg"
-  );
 
+  const el = document.getElementById(
+    airportKey === "EBCI" ? "meteo-details-ebci" : "meteo-details-eblg"
+  );
   if (!el) return;
 
+  // --- Extraction METAR ---
   const temp = metar?.temperature?.value ?? metar?.temperature?.celsius;
   const dew = metar?.dewpoint?.value ?? metar?.dewpoint?.celsius;
   const qnh = metar?.altimeter?.value ?? metar?.qnh?.hpa;
@@ -583,111 +615,63 @@ function updateWeatherDetails(airportKey, metar) {
   const windSpeed = metar?.wind_speed?.value ?? metar?.wind?.speed_kt;
   const windSpeedMs = windSpeed != null ? (windSpeed * 0.514444).toFixed(1) : null;
 
-  const gustColor = classifyGustColor(windGust);
-const avgTag = document.getElementById(
-  airportKey === "EBCI"
-    ? "wind-avg-tag-ebci"
-    : "wind-avg-tag-eblg"
-);
+  const windGust = metar?.wind_gust?.value ?? metar?.wind?.gust_kt ?? null;
+  const windGustMs = windGust != null ? (windGust * 0.514444).toFixed(1) : null;
 
-if (avgTag && avgDir != null) {
-  avgTag.textContent = `${avgDir}°`;
-}
+  // --- VRB ---
+  const isVRB =
+    metar?.raw?.includes("VRB") ||
+    windDir == null ||
+    (metar?.wind?.variable?.from && metar?.wind?.variable?.to &&
+      Math.abs(metar.wind.variable.to - metar.wind.variable.from) >= 60);
 
-const gustArrow = document.getElementById(
-  airportKey === "EBCI"
-    ? "wind-gust-arrow-ebci"
-    : "wind-gust-arrow-eblg"
-);
-
-if (gustArrow && windDir != null && windGust != null) {
-  gustArrow.style.transform =
-    `translate(-50%, -50%) rotate(${windDir}deg)`;
-
-  gustArrow.style.backgroundColor = gustColor;
-  gustArrow.style.opacity = 0.85;
-}
-  
-${windGust != null ? `
-  <br>🌬 Rafales :
-  <span style="color:${classifyGustColor(windGust)};">
-    ${windGust} kt (${windGustMs} m/s)
-  </span>
-` : ""}
-const gustTag = document.getElementById(
-  airportKey === "EBCI"
-    ? "wind-gust-tag-ebci"
-    : "wind-gust-tag-eblg"
-);
-
-if (gustTag && windGust != null) {
-  gustTag.textContent = `G${windGust}KT`;
-  gustTag.style.color = gustColor;
-}
-
-  // --- CISAILLEMENT (WIND SHEAR) ---
-let shear = null;
-
-// Détection METAR WS
-if (metar?.raw?.includes("WS")) {
-  shear = "Wind Shear signalé dans le METAR";
-}
-
-// Détection cisaillement par différence rafales / vent
-if (windGust != null && windSpeed != null) {
-  const diff = windGust - windSpeed;
-  if (diff >= 10) {
-    shear = `Cisaillement détecté : Δ ${diff} kt`;
+  // --- Direction moyenne ---
+  let avgDir = windDir;
+  if (isVRB && metar?.wind?.variable?.from && metar?.wind?.variable?.to) {
+    avgDir = Math.round(
+      (metar.wind.variable.from + metar.wind.variable.to) / 2
+    );
   }
-}
 
-if (shear) {
-  el.innerHTML += `
-    <br>⚠️ <span style="color:#dc2626;font-weight:600;">
-      ${shear}
-    </span>
-  `;
-}
-if (isVRB && arrow) {
-  arrow.style.border = "2px dashed #f59e0b"; // orange VRB
-}
-let avgDir = windDir;
+  // --- Cisaillement ---
+  let shear = null;
+  if (metar?.raw?.includes("WS")) {
+    shear = "Wind Shear signalé dans le METAR";
+  }
+  if (windGust != null && windSpeed != null && windGust - windSpeed >= 10) {
+    shear = `Cisaillement détecté : Δ ${windGust - windSpeed} kt`;
+  }
 
-// Si VRB → moyenne des bornes METAR
-if (isVRB && metar?.wind?.variable?.from && metar?.wind?.variable?.to) {
-  avgDir = Math.round(
-    (metar.wind.variable.from + metar.wind.variable.to) / 2
-  );
-}
-
+  // --- Piste estimée ---
   const airport = airports[airportKey];
   const runway = estimateRunwayFromWind(airport, windDir);
 
   let runwayInfo = "";
-
   if (runway) {
     const comp = calculateWindComponents(runway.heading, windDir, windSpeed);
-    if (comp) {
-      runwayInfo = `
-        <br>🛬 Piste estimée : RWY ${runway.name}
-        <br>💨 Vent : ${windSpeed ?? "--"} kt (${windSpeedMs ?? "--"} m/s)
-        ${windGust != null ? `<br>🌬 Rafales : ${windGust} kt (${windGustMs} m/s)` : ""}
-        <br>↕ Vent de face (rafales) : ${comp.headwind + (windGust - windSpeed)} kt
-        <br>↔ Vent de travers : ${comp.crosswind} kt
-        <br>↕ Vent de face : ${comp.headwind} kt
-      `;
-    }
+    runwayInfo = `
+      <br>🛬 Piste estimée : RWY ${runway.name}
+      <br>💨 Vent : ${windSpeed ?? "--"} kt (${windSpeedMs ?? "--"} m/s)
+      ${windGust != null ? `<br>🌬 Rafales : ${windGust} kt (${windGustMs} m/s)` : ""}
+      <br>↕ Vent de face : ${comp.headwind} kt
+      <br>↔ Vent de travers : ${comp.crosswind} kt
+    `;
   }
 
+  // --- Affichage final ---
   el.innerHTML = `
     <strong>Conditions actuelles</strong>
     <br>🌡 Température : ${temp ?? "--"} °C
     <br>💧 Point de rosée : ${dew ?? "--"} °C
     <br>📈 QNH : ${qnh ?? "--"} hPa
+    ${isVRB ? "<br>🔄 Vent variable (VRB)" : ""}
+    ${avgDir != null ? `<br>🧭 Direction moyenne : ${avgDir}°` : ""}
     ${runwayInfo}
+    ${shear ? `<br>⚠️ <span style="color:#dc2626;font-weight:600;">${shear}</span>` : ""}
     <br>📝 Tendance : ${trend}
   `;
 }
+
 
 function updateMetarUI(airportKey, metar) {
   const idSummary = airportKey === "EBCI" ? "meteo-ebci-summary" : "meteo-eblg-summary";
