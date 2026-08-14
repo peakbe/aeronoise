@@ -616,6 +616,41 @@ if (gustTag && windGust != null) {
   gustTag.style.color = gustColor;
 }
 
+  // --- CISAILLEMENT (WIND SHEAR) ---
+let shear = null;
+
+// Détection METAR WS
+if (metar?.raw?.includes("WS")) {
+  shear = "Wind Shear signalé dans le METAR";
+}
+
+// Détection cisaillement par différence rafales / vent
+if (windGust != null && windSpeed != null) {
+  const diff = windGust - windSpeed;
+  if (diff >= 10) {
+    shear = `Cisaillement détecté : Δ ${diff} kt`;
+  }
+}
+
+if (shear) {
+  el.innerHTML += `
+    <br>⚠️ <span style="color:#dc2626;font-weight:600;">
+      ${shear}
+    </span>
+  `;
+}
+if (isVRB && arrow) {
+  arrow.style.border = "2px dashed #f59e0b"; // orange VRB
+}
+let avgDir = windDir;
+
+// Si VRB → moyenne des bornes METAR
+if (isVRB && metar?.wind?.variable?.from && metar?.wind?.variable?.to) {
+  avgDir = Math.round(
+    (metar.wind.variable.from + metar.wind.variable.to) / 2
+  );
+}
+
   const airport = airports[airportKey];
   const runway = estimateRunwayFromWind(airport, windDir);
 
@@ -678,6 +713,12 @@ function classifyGustColor(gustKt) {
   if (gustKt < 30) return "#f97316";    // orange
   return "#dc2626";                     // rouge
 }
+  
+const isVRB =
+  metar?.raw?.includes("VRB") ||
+  windDir == null ||
+  (metar?.wind?.variable?.from && metar?.wind?.variable?.to &&
+    Math.abs(metar.wind.variable.to - metar.wind.variable.from) >= 60);
 
   const temp = metar?.temperature?.value ?? metar?.temperature?.celsius ?? null;
   const qnh = metar?.altimeter?.value ?? metar?.qnh?.hpa ?? null;
@@ -686,6 +727,8 @@ function classifyGustColor(gustKt) {
   `Vent: ${windDir != null ? windDir + "°" : "n/a"} | ` +
   `${windSpeedMs != null ? windSpeedMs + " m/s" : "n/a"} | ` +
   `Rafales: ${windGust != null ? windGust + " kt (" + windGustMs + " m/s)" : "n/a"} | ` +
+  + ` | Direction : ${isVRB ? "VRB" : windDir + "°"}`
+
   `T: ${temp != null ? temp + "°C" : "n/a"} | ` +
   `QNH: ${qnh != null ? qnh + " hPa" : "n/a"}`;
 
@@ -697,7 +740,13 @@ function classifyGustColor(gustKt) {
     windCache.EBCI.speed = windSpeed;
     updateWindRose(airportKey, windDir, windSpeed);
     updateWeatherDetails(airportKey, metar);
-    
+
+    if (isVRB) {
+  el.innerHTML += `
+    <br>🔄 Vent variable (VRB)
+  `;
+}
+
   } else {
     windCache.EBLG.dir = windDir;
     windCache.EBLG.speed = windSpeed;
