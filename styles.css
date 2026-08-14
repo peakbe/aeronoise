@@ -305,3 +305,86 @@ button {
   border-color: #10b981;
   color: white;
 }
+
+// boutons cockpit
+.cockpit-toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.cockpit-switch input {
+  display: none;
+}
+
+.cockpit-switch span,
+.cockpit-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 90px;
+  height: 36px;
+
+  border-radius: 8px;
+
+  border: 1px solid #1e3a5f;
+
+  font-weight: 600;
+  font-size: 13px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      180deg,
+      #4ea3ff 0%,
+      #1e62b5 45%,
+      #0a3d78 100%
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 2px 6px rgba(0,0,0,.25);
+
+  cursor: pointer;
+
+  transition: all .2s ease;
+}
+
+.cockpit-switch span:hover,
+.cockpit-button:hover {
+  filter: brightness(1.1);
+}
+
+.cockpit-switch input:checked + span {
+  background:
+    linear-gradient(
+      180deg,
+      #67d1ff 0%,
+      #1993ff 50%,
+      #005ab5 100%
+    );
+
+  box-shadow:
+    0 0 12px rgba(0,170,255,.6),
+    inset 0 1px 0 rgba(255,255,255,.45);
+}
+
+.cockpit-switch input:not(:checked) + span {
+  background:
+    linear-gradient(
+      180deg,
+      #666 0%,
+      #444 50%,
+      #222 100%
+    );
+
+  color: #ddd;
+}
+
+.cockpit-button:active {
+  transform: translateY(1px);
+}
