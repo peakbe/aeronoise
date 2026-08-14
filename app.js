@@ -650,6 +650,50 @@ function filterFlightsAirlabsForNoise(airportKey, flights) {
     return FIXED_RULES_EBCI[key] || null;
   }
 
+const DISPLAY_RULES = {
+  EBLG: {
+    "22": {
+      green: [
+        "F001","F002","F003","F004","F005","F006","F007","F008",
+        "F009","F010","F011","F012","F013","F014","F015","F016","F017"
+      ],
+      red: []
+    },
+
+    "04": {
+      green: [
+        "F001","F002","F003","F007","F008",
+        "F009","F011","F013","F014","F015"
+      ],
+      red: [
+        "F004","F005","F006",
+        "F010","F012","F016","F017"
+      ]
+    }
+  },
+
+  EBCI: {
+    "24": {
+      green: [
+        "F101","F102","F103","F104","F105","F106","F107",
+        "F108","F109","F110","F111","F112",
+        "F114","F116","F117","F118","F119"
+      ],
+      red: []
+    },
+
+    "06": {
+      green: [
+        "F101","F102","F103","F104","F105","F106","F107",
+        "F108","F109","F110","F111","F112","F119"
+      ],
+      red: [
+        "F114","F116","F117","F118"
+      ]
+    }
+  }
+};
+
   function buildNoiseCorridorPolygon(airportKey, runwayHeading) {
     const ap = airports[airportKey];
     const lengthKm = 20;
