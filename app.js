@@ -697,75 +697,53 @@ function updateMetarUI(airportKey, metar) {
   const elSummary = document.getElementById(idSummary);
   const elRaw = document.getElementById(idRaw);
 
-  if (!elSummary || !elRaw) {
-    return;
-  }
+  if (!elSummary || !elRaw) return;
 
   const windDir = metar?.wind_direction?.value ?? metar?.wind?.direction?.degrees ?? null;
   const windSpeed = metar?.wind_speed?.value ?? metar?.wind?.speed_kt ?? null;
-  const windSpeedMs =
-    windSpeed != null
-      ? (windSpeed * 0.514444).toFixed(1)
-      : null;
+  const windSpeedMs = windSpeed != null ? (windSpeed * 0.514444).toFixed(1) : null;
 
-  const windGust =
-  metar?.wind_gust?.value ??
-  metar?.wind?.gust_kt ??
-  null;
-
-const windGustMs =
-  windGust != null
-    ? (windGust * 0.514444).toFixed(1)
-    : null;
-  
-function classifyGustColor(gustKt) {
-  if (gustKt == null) return "#6b7280"; // gris
-  if (gustKt < 20) return "#22c55e";    // vert
-  if (gustKt < 30) return "#f97316";    // orange
-  return "#dc2626";                     // rouge
-}
-  
-const isVRB =
-  metar?.raw?.includes("VRB") ||
-  windDir == null ||
-  (metar?.wind?.variable?.from && metar?.wind?.variable?.to &&
-    Math.abs(metar.wind.variable.to - metar.wind.variable.from) >= 60);
+  const windGust = metar?.wind_gust?.value ?? metar?.wind?.gust_kt ?? null;
+  const windGustMs = windGust != null ? (windGust * 0.514444).toFixed(1) : null;
 
   const temp = metar?.temperature?.value ?? metar?.temperature?.celsius ?? null;
   const qnh = metar?.altimeter?.value ?? metar?.qnh?.hpa ?? null;
 
-    elSummary.textContent =
-  `Vent: ${windDir != null ? windDir + "°" : "n/a"} | ` +
-  `${windSpeedMs != null ? windSpeedMs + " m/s" : "n/a"} | ` +
-  `Rafales: ${windGust != null ? windGust + " kt (" + windGustMs + " m/s)" : "n/a"} | ` +
-  `Direction : ${isVRB ? "VRB" : windDir + "°"} | ` +
-  `T: ${temp != null ? temp + "°C" : "n/a"} | ` +
-  `QNH: ${qnh != null ? qnh + " hPa" : "n/a"}`;
+  const isVRB =
+    metar?.raw?.includes("VRB") ||
+    windDir == null ||
+    (metar?.wind?.variable?.from && metar?.wind?.variable?.to &&
+      Math.abs(metar.wind.variable.to - metar.wind.variable.from) >= 60);
 
+  // --- Direction moyenne ---
+  let avgDir = windDir;
+  if (isVRB && metar?.wind?.variable?.from && metar?.wind?.variable?.to) {
+    avgDir = Math.round(
+      (metar.wind.variable.from + metar.wind.variable.to) / 2
+    );
+  }
+
+  // --- Résumé METAR ---
+  elSummary.textContent =
+    `Vent: ${windDir != null ? windDir + "°" : "n/a"} | ` +
+    `${windSpeedMs != null ? windSpeedMs + " m/s" : "n/a"} | ` +
+    `Rafales: ${windGust != null ? windGust + " kt (" + windGustMs + " m/s)" : "n/a"} | ` +
+    `Direction : ${isVRB ? "VRB" : windDir + "°"} | ` +
+    `T: ${temp != null ? temp + "°C" : "n/a"} | ` +
+    `QNH: ${qnh != null ? qnh + " hPa" : "n/a"}`;
+
+  // --- METAR brut ---
   elRaw.textContent = metar?.raw ?? metar?.raw_text ?? "(METAR brut non disponible)";
 
-  if (airportKey === "EBCI") {
-    windCache.EBCI.dir = windDir;
-    windCache.EBCI.speed = windSpeed;
-    updateWindRose(airportKey, windDir, windSpeed, windGust, isVRB, avgDir);
-    updateWeatherDetails(airportKey, metar);
+  // --- Cache vent ---
+  windCache[airportKey].dir = windDir;
+  windCache[airportKey].speed = windSpeed;
 
-  } else {
-    windCache.EBLG.dir = windDir;
-    windCache.EBLG.speed = windSpeed;
-
-    let avgDir = windDir;
-if (isVRB && metar?.wind?.variable?.from && metar?.wind?.variable?.to) {
-  avgDir = Math.round(
-    (metar.wind.variable.from + metar.wind.variable.to) / 2
-  );
+  // --- Mise à jour ND + détails ---
+  updateWindRose(airportKey, windDir, windSpeed, windGust, isVRB, avgDir);
+  updateWeatherDetails(airportKey, metar);
 }
 
-updateWindRose(airportKey, windDir, windSpeed, windGust, isVRB, avgDir);
-updateWeatherDetails(airportKey, metar);
-
-  }
-}
 
 function estimateRunwayFromWind(airport, windDirDeg) {
   if (windDirDeg == null || isNaN(windDirDeg)) return null;
