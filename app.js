@@ -1326,9 +1326,7 @@ const sorted =
   async function processAirport(airportKey) {
     const ap = airports[airportKey];
 
-    const enabled =
-      (airportKey === "EBCI" && document.getElementById("filter-ebci").checked) ||
-      (airportKey === "EBLG" && document.getElementById("filter-eblg").checked);
+    const enabled = filters[airportKey];
 
     if (!enabled) {
       sonometerMarkers[airportKey].forEach(s => s.marker.setStyle(sonometerNormalStyle));
@@ -1343,6 +1341,15 @@ const sorted =
       document.getElementById(listId).textContent = "Aéroport non sélectionné dans les filtres.";
       document.getElementById(flightsId).textContent = "Aéroport non sélectionné dans les filtres.";
       return;
+      airportMarkers[airportKey].setStyle({
+  opacity: 0.2,
+  fillOpacity: 0.2
+});
+      airportMarkers[airportKey].setStyle({
+  opacity: 1,
+  fillOpacity: 0.9
+});
+
     }
 
     try {
@@ -1539,21 +1546,56 @@ const sorted =
   }
 
 // EVENEMENTS
+
 document
   .getElementById("btn-reset-zoom")
   .addEventListener("click", resetMapView);
 
+
+// Boutons EBCI / EBLG
+
+let filters = {
+  EBCI: true,
+  EBLG: true
+};
+
+document
+  .getElementById("filter-ebci")
+  .addEventListener("click", () => {
+
+    filters.EBCI = !filters.EBCI;
+
+    document
+      .getElementById("filter-ebci")
+      .classList.toggle(
+        "active",
+        filters.EBCI
+      );
+
+    refreshAll();
+  });
+
+document
+  .getElementById("filter-eblg")
+  .addEventListener("click", () => {
+
+    filters.EBLG = !filters.EBLG;
+
+    document
+      .getElementById("filter-eblg")
+      .classList.toggle(
+        "active",
+        filters.EBLG
+      );
+
+    refreshAll();
+  });
+
+
 // DEMARRAGE
-   refreshAll();
+
+refreshAll();
 
 setTimeout(() => {
   resetMapView();
 }, 500);
-
-refreshAll();
-
-// Forcer le rafraîchissement de la carte
-setTimeout(() => {
-  map.invalidateSize();
-  resetMapView();
-}, 600);
