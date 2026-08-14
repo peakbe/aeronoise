@@ -738,10 +738,9 @@ const isVRB =
   `Vent: ${windDir != null ? windDir + "°" : "n/a"} | ` +
   `${windSpeedMs != null ? windSpeedMs + " m/s" : "n/a"} | ` +
   `Rafales: ${windGust != null ? windGust + " kt (" + windGustMs + " m/s)" : "n/a"} | ` +
-  ` | Direction : ${isVRB ? "VRB" : windDir + "°"}`
+  `Direction : ${isVRB ? "VRB" : windDir + "°"} | ` +
   `T: ${temp != null ? temp + "°C" : "n/a"} | ` +
   `QNH: ${qnh != null ? qnh + " hPa" : "n/a"}`;
-
 
   elRaw.textContent = metar?.raw ?? metar?.raw_text ?? "(METAR brut non disponible)";
 
@@ -754,8 +753,17 @@ const isVRB =
   } else {
     windCache.EBLG.dir = windDir;
     windCache.EBLG.speed = windSpeed;
-    updateWindRose(airportKey, windDir, windSpeed, windGust, isVRB, avgDir);
-    updateWeatherDetails(airportKey, metar);
+
+    let avgDir = windDir;
+if (isVRB && metar?.wind?.variable?.from && metar?.wind?.variable?.to) {
+  avgDir = Math.round(
+    (metar.wind.variable.from + metar.wind.variable.to) / 2
+  );
+}
+
+updateWindRose(airportKey, windDir, windSpeed, windGust, isVRB, avgDir);
+updateWeatherDetails(airportKey, metar);
+
   }
 }
 
