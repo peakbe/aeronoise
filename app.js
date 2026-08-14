@@ -1038,179 +1038,9 @@ function updateImpactedListUI(airportKey, impacted, runway, usedFixedRule = fals
       .join("<br>");
 }
 
-// TIMELINE & FLIGHTS
+// TIMELINE & FLIGHTS - supprimée
 
-let timelineFlights = [];
-let timelineTimer = null;
-let timelineCurrent = 0;
 
-const flightMarkers = {};
-
-function buildSegmentsFromPoints(points) {
-  const segs = [];
-  let total = 0;
-  for (let i = 0; i < points.length - 1; i++) {
-    const a = points[i];
-    const b = points[i + 1];
-    const d = L.latLng(a.lat, a.lon).distanceTo([b.lat, b.lon]);
-    segs.push({ a, b, len: d });
-    total += d;
-  }
-  return { segments: segs, totalLen: total };
-}
-
-function getProcedureForFlight(airportKey, runwayName, mode) {
-  const list = PROCEDURES[airportKey] || [];
-  return list.find(p => p.runway === runwayName && p.mode === mode) || null;
-}
-
-function ensureFlightMarker(fKey, proc, mode) {
-  if (flightMarkers[fKey]) return flightMarkers[fKey];
-
-  const { segments, totalLen } = buildSegmentsFromPoints(proc.points);
-  const start = proc.points[0];
-
-  const color = mode === "ARR" ? "#0ea5e9" : "#f97316";
-
-  const marker = L.circleMarker([start.lat, start.lon], {
-    radius: 6,
-    color: "#111827",
-    fillColor: color,
-    fillOpacity: 0.95
-  }).addTo(map);
-
-  flightMarkers[fKey] = { marker, proc, segments, totalLen, mode };
-  return flightMarkers[fKey];
-}
-
-function positionAlongProcedure(obj, ratio) {
-  const { segments, totalLen } = obj;
-  const targetDist = totalLen * ratio;
-  let acc = 0;
-  for (const s of segments) {
-    if (acc + s.len >= targetDist) {
-      const remain = targetDist - acc;
-      const t = s.len > 0 ? remain / s.len : 0;
-      const lat = s.a.lat + (s.b.lat - s.a.lat) * t;
-      const lon = s.a.lon + (s.b.lon - s.a.lon) * t;
-      return { lat, lon };
-    }
-    acc += s.len;
-  }
-  const last = segments[segments.length - 1].b;
-  return { lat: last.lat, lon: last.lon };
-}
-
-function prepareTimelineFlights(airportKey, flights, runway, mode) {
-  const filtered = filterFlightsAirlabsForNoise(airportKey, flights);
-
-  const mapped = filtered.map(f => {
-    const dep = f.dep_actual || f.dep_estimated || f.dep_time || f.dep_time_utc;
-    const arr = f.arr_actual || f.arr_estimated || f.arr_time || f.arr_time_utc;
-
-    function toMinutes(t) {
-      if (!t) return null;
-      const d = new Date(t);
-      if (isNaN(d.getTime())) return null;
-      return d.getUTCHours() * 60 + d.getUTCMinutes();
-    }
-
-    return {
-      airportKey,
-      flight: f,
-      depMin: toMinutes(dep),
-      arrMin: toMinutes(arr),
-      runwayName: runway ? runway.name : (f.runway ? String(f.runway) : null),
-      mode
-    };
-  });
-
-  flightIndex[airportKey] = flightIndex[airportKey] || {};
-  mapped.forEach(fm => {
-    const f = fm.flight;
-    const key =
-      (f.flight_iata || f.flight_icao || f.flight_number || "?") +
-      "-" + airportKey;
-    flightIndex[airportKey][key] = fm;
-  });
-
-  timelineFlights = timelineFlights.concat(mapped);
-}
-
-function updateTimelineUI(minute) {
-  const hh = String(Math.floor(minute / 60)).padStart(2, "0");
-  const mm = String(minute % 60).padStart(2, "0");
-  document.getElementById("timeline-label").textContent = `${hh}:${mm}`;
-  highlightActiveFlights(minute);
-}
-
-function highlightActiveFlights(minute) {
-  Object.values(flightMarkers).forEach(obj => {
-    obj.marker.setStyle({ opacity: 0 });
-  });
-
-  const active = timelineFlights.filter(f => {
-    if (f.depMin != null && f.arrMin != null && f.arrMin > f.depMin) {
-      return minute >= f.depMin && minute <= f.arrMin;
-    }
-    if (f.depMin != null) return minute >= f.depMin && minute <= f.depMin + 20;
-    return false;
-  });
-
-  active.forEach(f => {
-    const key =
-      (f.flight.flight_iata || f.flight.flight_icao || f.flight.flight_number || "?") +
-      "-" + f.airportKey;
-
-    const proc = (f.runwayName && f.mode)
-      ? getProcedureForFlight(f.airportKey, f.runwayName, f.mode)
-      : null;
-
-    if (!proc) return;
-
-    const fm = ensureFlightMarker(key, proc, f.mode);
-
-    let ratio = 0.5;
-    if (f.depMin != null && f.arrMin != null && f.arrMin > f.depMin) {
-      ratio = (minute - f.depMin) / (f.arrMin - f.depMin);
-      ratio = Math.max(0, Math.min(1, ratio));
-    }
-
-    const pos = positionAlongProcedure(fm, ratio);
-    fm.marker.setLatLng([pos.lat, pos.lon]);
-    fm.marker.setStyle({ opacity: 1 });
-  });
-}
-
-// TIMELINE CONTROLS
-function startTimeline() {
-  if (timelineTimer) return;
-  timelineTimer = setInterval(() => {
-    timelineCurrent++;
-    if (timelineCurrent > 1440) timelineCurrent = 0;
-    const range = document.getElementById("timeline-range");
-    if (range) range.value = timelineCurrent;
-    updateTimelineUI(timelineCurrent);
-  }, 200);
-}
-
-function stopTimeline() {
-  clearInterval(timelineTimer);
-  timelineTimer = null;
-}
-
-document.getElementById("timeline-play")?.addEventListener("click", () => {
-  startTimeline();
-});
-
-document.getElementById("timeline-pause")?.addEventListener("click", () => {
-  stopTimeline();
-});
-
-document.getElementById("timeline-range")?.addEventListener("input", (e) => {
-  timelineCurrent = parseInt(e.target.value, 10);
-  updateTimelineUI(timelineCurrent);
-});
 
 function computeImpactedForFlight(airportKey, proc, flight) {
   const list = sonometerMarkers[airportKey];
@@ -1443,7 +1273,7 @@ async function processAirport(airportKey) {
 
       updateImpactedListUI(airportKey, impacted, runway, usedFixedRule);
 
-      prepareTimelineFlights(airportKey, flights, runway, mode);
+      
     } else {
       updateImpactedListUI(airportKey, [], null);
       sonometerMarkers[airportKey].forEach(s => s.marker.setStyle(sonometerNormalStyle));
@@ -1502,13 +1332,13 @@ async function processAirport(airportKey) {
 }
 
 async function refreshAll() {
-  timelineFlights = [];
-  Object.values(flightMarkers).forEach(obj => map.removeLayer(obj.marker));
-  for (const k in flightMarkers) delete flightMarkers[k];
+  
   flightIndex.EBCI = {};
   flightIndex.EBLG = {};
 
-  await Promise.all([processAirport("EBCI"), processAirport("EBLG")]);
+  await processAirport("EBCI");
+  await processAirport("EBLG");
+
 }
 
 // EVENEMENTS
