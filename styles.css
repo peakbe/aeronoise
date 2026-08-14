@@ -1,44 +1,24 @@
+// 1. Palette Airbus ND
 :root {
-  --airport-color: #10b981;
-  --normal-color: #2563eb;
-  --impacted-color: #b91c1c;
-  --track-color: #f97316;
-  --zone04-color: #22c55e;
-  --zone22-color: #f97316;
-  --sidstar-color: #6366f1;
-  --arrival-color: #0ea5e9;
-  --departure-color: #f97316;
+  --nd-bg: #0b1120;
+  --nd-bg2: #020617;
+  --nd-border: #1f2937;
+  --nd-border2: #334155;
+  --nd-blue: #38bdf8;
+  --nd-green: #22c55e;
+  --nd-orange: #f97316;
+  --nd-red: #dc2626;
+  --nd-text: #e5e7eb;
+  --nd-shadow: rgba(0,0,0,0.6);
 }
 
-html,
-body {
+// 2. Structure générale (sidebar + map)
+html, body {
   height: 100%;
   margin: 0;
-}
-`
-
-body {
-  margin: 0;
+  background: var(--nd-bg);
+  color: var(--nd-text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-header {
-  padding: 0.5rem 1rem;
-  background: #111827;
-  color: #f9fafb;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
 }
 
 main {
@@ -49,7 +29,8 @@ main {
 }
 
 #sidebar {
-  border-right: 1px solid #e5e7eb;
+  background: var(--nd-bg);
+  border-right: 2px solid var(--nd-border);
   padding: 0.75rem;
   overflow-y: auto;
   font-size: 0.85rem;
@@ -61,362 +42,39 @@ main {
   min-height: 600px;
 }
 
+// 3. Titres / blocs / tags
 .block {
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.block:last-child {
-  border-bottom: none;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--nd-border);
 }
 
 .block h2 {
   margin: 0 0 0.25rem;
   font-size: 0.9rem;
-  font-weight: 600;
-  color: #111827;
+  font-weight: 700;
+  color: var(--nd-blue);
+  letter-spacing: 1px;
 }
 
+// 4. METAR brut / texte météo
 .metar {
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: 0.8rem;
-  background: #f9fafb;
-  border-radius: 4px;
+  background: var(--nd-bg2);
+  border: 1px solid var(--nd-border);
+  border-radius: 6px;
   padding: 0.35rem 0.5rem;
   margin-top: 0.25rem;
-  white-space: pre-wrap;
+  color: var(--nd-blue);
+  text-shadow: 0 0 4px #000;
 }
 
-.small {
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-.tag {
-  display: inline-block;
-  padding: 0.1rem 0.35rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  margin-right: 0.25rem;
-  margin-top: 0.15rem;
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.tag.impacted {
-  background: var(--impacted-color);
-  color: #fff;
-}
-
-.legend {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-  flex-wrap: wrap;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  display: inline-block;
-}
-
-.dot-impacted { background: var(--impacted-color); }
-.dot-normal { background: var(--normal-color); }
-.dot-airport { background: var(--airport-color); }
-.dot-track { background: var(--track-color); }
-.dot-zone04 { background: var(--zone04-color); }
-.dot-zone22 { background: var(--zone22-color); }
-.dot-sidstar { background: var(--sidstar-color); }
-.dot-dep { background: var(--departure-color); }
-.dot-arr { background: var(--arrival-color); }
-
-.filters label {
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.filters input[type="checkbox"] {
-  margin-right: 0.25rem;
-}
-
-.filters select,
-.filters input[type="number"],
-.filters input[type="text"] {
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 0.15rem;
-  margin-bottom: 0.35rem;
-  padding: 0.15rem 0.25rem;
-  font-size: 0.8rem;
-}
-
-button {
-  font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
-}
-
-.flight-row {
-  cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 4px;
-  transition: background-color .2s ease;
-}
-
-.flight-row:hover {
-  background: #f3f4f6;
-}
-
-.mt-035 {
-  margin-top: 0.35rem;
-}
-
-.mt-05 {
-  margin-top: 0.5rem;
-}
-
-.w-100 {
-  width: 100%;
-}
-
-@media (max-width: 900px) {
-  main {
-    grid-template-columns: 1fr;
-  }
-
-  #sidebar {
-    border-right: none;
-    border-bottom: 1px solid #e5e7eb;
-    max-height: 45vh;
-  }
-
-  #map {
-    min-height: 55vh;
-  }
-}
-
-.dot-green {
-  background: #22c55e;
-  border: 1px solid #166534;
-}
-
-.metar-widget {
-  margin-top: 0.5rem;
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-// rose des vents
+// 5. Rose des vents Airbus ND
 .wind-card {
-    margin-top: 10px;
-    text-align: center;
+  margin-top: 10px;
+  text-align: center;
 }
-
-.wind-rose {
-    width: 120px;
-    height: 120px;
-    margin: auto;
-    border: 2px solid #d1d5db;
-    border-radius: 50%;
-    position: relative;
-    background: white;
-}
-
-.wind-rose::before {
-    content: "N";
-    position: absolute;
-    top: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-weight: bold;
-}
-
-.wind-rose::after {
-    content: "S";
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-weight: bold;
-}
-
-.wind-arrow {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    font-size: 42px;
-    color: #ef4444;
-    transform-origin: center center;
-  
-  // Afficher tous les sonomètres avec un point coloré.
-}
-.sono-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 2px 0;
-}
-
-.sono-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.sono-dot.normal {
-  background: #2563eb;
-}
-
-.sono-dot.impacted {
-  background: #b91c1c;
-}
-
-// boutons affichage aéroports
-.airport-filters {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.airport-btn {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: #f3f4f6;
-  color: #374151;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.airport-btn:hover {
-  background: #e5e7eb;
-}
-
-.airport-btn.active {
-  background: #10b981;
-  border-color: #10b981;
-  color: white;
-}
-
-// boutons cockpit
-.cockpit-toolbar {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-
-.cockpit-switch input {
-  display: none;
-}
-
-.cockpit-switch span,
-.cockpit-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-width: 90px;
-  height: 36px;
-
-  border-radius: 8px;
-
-  border: 1px solid #1e3a5f;
-
-  font-weight: 600;
-  font-size: 13px;
-
-  color: white;
-
-  background:
-    linear-gradient(
-      180deg,
-      #4ea3ff 0%,
-      #1e62b5 45%,
-      #0a3d78 100%
-    );
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.35),
-    0 2px 6px rgba(0,0,0,.25);
-
-  cursor: pointer;
-
-  transition: all .2s ease;
-}
-
-.cockpit-switch span:hover,
-.cockpit-button:hover {
-  filter: brightness(1.1);
-}
-
-.cockpit-switch input:checked + span {
-  background:
-    linear-gradient(
-      180deg,
-      #67d1ff 0%,
-      #1993ff 50%,
-      #005ab5 100%
-    );
-
-  box-shadow:
-    0 0 12px rgba(0,170,255,.6),
-    inset 0 1px 0 rgba(255,255,255,.45);
-}
-
-.cockpit-switch input:not(:checked) + span {
-  background:
-    linear-gradient(
-      180deg,
-      #666 0%,
-      #444 50%,
-      #222 100%
-    );
-
-  color: #ddd;
-}
-
-.cockpit-button:active {
-  transform: translateY(1px);
-}
-
-// rafales
-.wind-gust-arrow {
-  position: absolute;
-  width: 6px;
-  height: 40px;
-  background-color: #f97316;
-  top: 50%;
-  left: 50%;
-  transform-origin: bottom center;
-  border-radius: 3px;
-  opacity: 0;
-}
-.wind-gust-tag {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-weight: 600;
-  font-size: 14px;
-}
-.wind-avg-tag {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #10b981; /* vert Airbus */
-}
-/* --- ROSE DES VENTS AIRBUS ND --- */
 
 .wind-rose {
   position: relative;
@@ -425,25 +83,25 @@ button {
   margin: 10px auto;
   border-radius: 50%;
   background: radial-gradient(circle at center,
-    #0b1120 0%,
-    #020617 40%,
-    #0b1120 100%);
-  border: 2px solid #1f2937;
-  box-shadow: 0 0 12px rgba(0,0,0,0.6) inset;
+    var(--nd-bg) 0%,
+    var(--nd-bg2) 40%,
+    var(--nd-bg) 100%);
+  border: 2px solid var(--nd-border);
+  box-shadow: inset 0 0 12px var(--nd-shadow);
 }
 
-/* Flèche vent moyen */
+/* Vent moyen */
 .wind-arrow {
   position: absolute;
   top: 50%;
   left: 50%;
   transform-origin: bottom center;
   font-size: 22px;
-  color: #38bdf8; /* bleu Airbus */
+  color: var(--nd-blue);
   text-shadow: 0 0 4px #000;
 }
 
-/* Flèche rafales */
+/* Rafales */
 .wind-gust-arrow {
   position: absolute;
   top: 50%;
@@ -453,129 +111,67 @@ button {
   transform-origin: bottom center;
   border-radius: 3px;
   opacity: 0;
-  box-shadow: 0 0 6px rgba(0,0,0,0.6);
+  box-shadow: 0 0 6px var(--nd-shadow);
 }
 
-/* Tag rafales GxxKT */
+/* Tag rafales */
 .wind-gust-tag {
   position: absolute;
   top: 8px;
   right: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #f97316;
+  color: var(--nd-orange);
   text-shadow: 0 0 4px #000;
 }
 
-/* Tag direction moyenne */
+/* Direction moyenne */
 .wind-avg-tag {
   position: absolute;
   bottom: 8px;
   right: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #22c55e; /* vert Airbus */
+  color: var(--nd-green);
   text-shadow: 0 0 4px #000;
 }
-.meteo-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  margin-bottom: 10px;
-}
 
-.meteo-buttons button {
-  padding: 6px 12px;
-  background: #0b1120;
-  color: #e5e7eb;
-  border: 1px solid #1f2937;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.meteo-buttons button:hover {
-  background: #1e293b;
-}
-/* --- BARRE DE BOUTONS AIRBUS ND --- */
-.meteo-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  margin-bottom: 12px;
-  justify-content: center;
-}
-
-/* --- BOUTONS AIRBUS ND --- */
-.meteo-buttons button {
-  padding: 8px 18px;
-  background: #0b1120; /* fond ND Airbus */
-  color: #38bdf8;      /* bleu Airbus */
-  border: 2px solid #1f2937; /* gris anthracite Airbus */
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  text-shadow: 0 0 4px #000;
-  box-shadow:
-    inset 0 0 6px rgba(0,0,0,0.6),
-    0 0 6px rgba(0,0,0,0.4);
-  transition: all 0.15s ease-in-out;
-}
-
-/* --- Effet cockpit “push button” --- */
-.meteo-buttons button:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 0 10px rgba(0,0,0,0.8),
-    0 0 2px rgba(0,0,0,0.3);
-}
-
-/* --- Survol Airbus ND --- */
-.meteo-buttons button:hover {
-  background: #1e293b;
-  border-color: #334155;
-}
-/* --- BARRE ND AIRBUS --- */
+// 6. Barre ND Airbus + boutons EFIS
 .nd-toolbar {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #0b1120;
-  border: 2px solid #1f2937;
+  background: var(--nd-bg);
+  border: 2px solid var(--nd-border);
   padding: 10px 15px;
   margin-bottom: 15px;
   border-radius: 8px;
-  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+  box-shadow: inset 0 0 12px var(--nd-shadow);
 }
 
-/* --- TITRE ND --- */
 .nd-title {
   font-size: 14px;
   font-weight: 700;
-  color: #38bdf8; /* bleu Airbus ND */
+  color: var(--nd-blue);
   letter-spacing: 1px;
   margin-bottom: 8px;
   text-shadow: 0 0 4px #000;
 }
 
-/* --- CONTENEUR DES BOUTONS --- */
 .nd-buttons {
   display: flex;
   flex-direction: row;
   gap: 12px;
 }
 
-/* --- BOUTONS ND --- */
 .nd-btn {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: #0b1120;
-  color: #38bdf8;
-  border: 2px solid #1f2937;
+  background: var(--nd-bg);
+  color: var(--nd-blue);
+  border: 2px solid var(--nd-border);
   border-radius: 6px;
   font-weight: 600;
   font-size: 14px;
@@ -583,18 +179,16 @@ button {
   letter-spacing: 0.5px;
   text-shadow: 0 0 4px #000;
   box-shadow:
-    inset 0 0 6px rgba(0,0,0,0.6),
+    inset 0 0 6px var(--nd-shadow),
     0 0 6px rgba(0,0,0,0.4);
   transition: all 0.15s ease-in-out;
 }
 
-/* --- Icônes EFIS --- */
-.nd-icon {
-  font-size: 16px;
-  color: #38bdf8;
+.nd-btn:hover {
+  background: #1e293b;
+  border-color: var(--nd-border2);
 }
 
-/* --- Effet cockpit “push button” --- */
 .nd-btn:active {
   transform: translateY(1px);
   box-shadow:
@@ -602,8 +196,21 @@ button {
     0 0 2px rgba(0,0,0,0.3);
 }
 
-/* --- Survol Airbus ND --- */
-.nd-btn:hover {
-  background: #1e293b;
-  border-color: #334155;
+.nd-icon {
+  font-size: 16px;
+  color: var(--nd-blue);
+}
+
+// 7. Sonomètres harmonisés ND
+.sono-dot.normal {
+  background: var(--normal-color);
+}
+
+.sono-dot.impacted {
+  background: var(--impacted-color);
+}
+
+.sono-dot.green {
+  background: var(--nd-green);
+  border: 1px solid #166534;
 }
