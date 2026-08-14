@@ -573,9 +573,7 @@ if (!elSummary || !elRaw) {
   windSpeed
 );
 
-updateWeatherDetails(
-
-  console.log(
+       console.log(
   airportKey,
   document.getElementById(
     airportKey === "EBCI"
@@ -584,6 +582,8 @@ updateWeatherDetails(
   )
 );
       
+updateWeatherDetails(
+     
   airportKey,
   metar
 );
