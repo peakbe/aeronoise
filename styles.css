@@ -477,3 +477,23 @@ button {
   color: #22c55e; /* vert Airbus */
   text-shadow: 0 0 4px #000;
 }
+.meteo-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.meteo-buttons button {
+  padding: 6px 12px;
+  background: #0b1120;
+  color: #e5e7eb;
+  border: 1px solid #1f2937;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.meteo-buttons button:hover {
+  background: #1e293b;
+}
