@@ -17,16 +17,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 
-  <script
-  async
-  defer
-  src="https://metar-taf.com/embed-js/EBCI">
 
-<script
-  async
-  defer
-  src="https://metar-taf.com/embed-js/EBLG">
-</script>
   
 <body>
 
@@ -84,18 +75,17 @@
     <div class="wind-rose">
       <div id="wind-arrow-ebci" class="wind-arrow">▲</div>
     </div>
-    <div id="wind-info-ebci" class="small">
-  Vent : ---
-</div>
 
-<div id="meteo-details-ebci" class="small">
-  ---
-</div>
-    <div id="meteo-ebci-summary" style="display:none"></div>
-    <div id="meteo-ebci-raw" style="display:none"></div>
     <div id="wind-info-ebci" class="small">
       Vent : ---
     </div>
+
+    <div id="meteo-details-ebci" class="small">
+      ---
+    </div>
+
+    <div id="meteo-ebci-summary" style="display:none"></div>
+    <div id="meteo-ebci-raw" style="display:none"></div>
 
   </div>
 
@@ -106,18 +96,17 @@
     <div class="wind-rose">
       <div id="wind-arrow-eblg" class="wind-arrow">▲</div>
     </div>
-    <div id="wind-info-eblg" class="small">
-  Vent : ---
-</div>
 
-<div id="meteo-details-eblg" class="small">
-  ---
-</div>
-    <div id="meteo-eblg-summary" style="display:none"></div>
-    <div id="meteo-eblg-raw" style="display:none"></div>
     <div id="wind-info-eblg" class="small">
       Vent : ---
     </div>
+
+    <div id="meteo-details-eblg" class="small">
+      ---
+    </div>
+
+    <div id="meteo-eblg-summary" style="display:none"></div>
+    <div id="meteo-eblg-raw" style="display:none"></div>
 
   </div>
 
@@ -139,7 +128,7 @@
 
     <!-- SONOMETRES -->
 
-    <div class="legend">
+   <div class="legend">
 
   <span>
     <span class="dot dot-airport"></span>
@@ -155,6 +144,8 @@
     <span class="dot dot-impacted"></span>
     Sonomètre impacté
   </span>
+
+</div>
 
       <div class="block">
 
@@ -240,21 +231,6 @@
 
 <!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-// météo metar - taf - ebci
-<script
-  async
-  defer
-  crossorigin="anonymous"
-  src="https://metar-taf.com/fr/embed-js/EBCI?qnh=hPa&rh=rh&target=metart
-
-// météo metar - taf eblg
-<script
-  async
-  defer
-  crossorigin="anonymous"
-  src="https://metar-taf.com/fr/embed-js/EBLG?qnh=hPa&rh=rh&target=metartaf-eblg">
-</script>
 
 // chargement app.js  
 <script src="app.js"></script>
