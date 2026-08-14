@@ -388,6 +388,8 @@ button {
 .cockpit-button:active {
   transform: translateY(1px);
 }
+
+// rafales
 .wind-gust-arrow {
   position: absolute;
   width: 6px;
@@ -398,4 +400,11 @@ button {
   transform-origin: bottom center;
   border-radius: 3px;
   opacity: 0;
+}
+.wind-gust-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-weight: 600;
+  font-size: 14px;
 }
