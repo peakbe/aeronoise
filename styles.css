@@ -276,3 +276,32 @@ button {
 .sono-dot.impacted {
   background: #b91c1c;
 }
+
+// boutons affichage aéroports
+.airport-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.airport-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.airport-btn:hover {
+  background: #e5e7eb;
+}
+
+.airport-btn.active {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
+}
