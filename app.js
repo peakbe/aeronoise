@@ -642,6 +642,8 @@ function updateMetarUI(airportKey, metar) {
     windCache.EBCI.dir = windDir;
     windCache.EBCI.speed = windSpeed;
     updateWindRose(airportKey, windDir, windSpeed);
+    updateWeatherDetails(airportKey, metar);
+    
   } else {
     windCache.EBLG.dir = windDir;
     windCache.EBLG.speed = windSpeed;
