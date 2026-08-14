@@ -388,3 +388,14 @@ button {
 .cockpit-button:active {
   transform: translateY(1px);
 }
+.wind-gust-arrow {
+  position: absolute;
+  width: 6px;
+  height: 40px;
+  background-color: #f97316;
+  top: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  border-radius: 3px;
+  opacity: 0;
+}
