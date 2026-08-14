@@ -94,7 +94,7 @@ const sonometersEBLG = [
   { id: "F015", address: "Rue du Brouck 5, Juprelle", latDMS: "50 41 19.82 N", lonDMS: "5 31 34.38 E" },
   { id: "F016", address: "Rue de Chapon-Seraing 14, Verlaine", latDMS: "50 37 10.62 N", lonDMS: "5 17 43.24 E" },
   { id: "F017", address: "Rue de la Pommeraie 1, 4690 Wonck", latDMS: "50 45 53.58 N", lonDMS: "5 37 50.18 E" }
-};
+];
 
 /********** FIXES AIP – À REMPLACER PAR LES VRAIES COORDONNÉES **********/
 const AIP_FIXES = {
