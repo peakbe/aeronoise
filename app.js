@@ -514,11 +514,52 @@ function applyDisplayRules(airportKey, runwayName) {
     if (airportKey === "EBCI") {
       windCache.EBCI.dir = windDir;
       windCache.EBCI.speed = windSpeed;
+      updateWindRose(
+    airportKey,
+    windDir,
+    windSpeed
+);
     } else {
       windCache.EBLG.dir = windDir;
       windCache.EBLG.speed = windSpeed;
+      updateWindRose(
+    airportKey,
+    windDir,
+    windSpeed
+);
     }
   }
+
+function updateWindRose(
+  airportKey,
+  windDir,
+  windSpeed
+) {
+
+  const arrow =
+    document.getElementById(
+      airportKey === "EBCI"
+        ? "wind-arrow-ebci"
+        : "wind-arrow-eblg"
+    );
+
+  const info =
+    document.getElementById(
+      airportKey === "EBCI"
+        ? "wind-info-ebci"
+        : "wind-info-eblg"
+    );
+
+  if (!arrow || !info) {
+    return;
+  }
+
+  arrow.style.transform =
+    `translate(-50%, -50%) rotate(${windDir || 0}deg)`;
+
+  info.textContent =
+    `Vent : ${windDir ?? "--"}° / ${windSpeed ?? "--"} kt`;
+}
 
   function estimateRunwayFromWind(airport, windDirDeg) {
     if (windDirDeg == null || isNaN(windDirDeg)) return null;
@@ -1183,6 +1224,32 @@ const DISPLAY_RULES = {
       const windDir = metar?.wind_direction?.value ?? metar?.wind?.direction?.degrees ?? null;
       const windSpeed = metar?.wind_speed?.value ?? metar?.wind?.speed_kt ?? null;
 
+      // ajout rose des vents
+      function updateWindRose(airportKey, windDir, windSpeed) {
+
+    const arrow =
+        document.getElementById(
+            airportKey === "EBCI"
+                ? "wind-arrow-ebci"
+                : "wind-arrow-eblg"
+        );
+
+    const info =
+        document.getElementById(
+            airportKey === "EBCI"
+                ? "wind-info-ebci"
+                : "wind-info-eblg"
+        );
+
+    if (!arrow || !info) return;
+
+    arrow.style.transform =
+        `translate(-50%,-50%) rotate(${windDir || 0}deg)`;
+
+    info.textContent =
+        `Vent : ${windDir ?? "--"}° / ${windSpeed ?? "--"} kt`;
+}
+      
       const { runway: runwayFromFlights, flightsFiltered } = extractRunwayFromAirlabs(airportKey, flights);
       let runway = runwayFromFlights;
       let source = "Airlabs (piste réelle / direction)";
