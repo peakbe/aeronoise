@@ -210,3 +210,46 @@ button {
   overflow: hidden;
   border-radius: 8px;
 }
+
+// rose des vents
+.wind-card {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.wind-rose {
+    width: 120px;
+    height: 120px;
+    margin: auto;
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    position: relative;
+    background: white;
+}
+
+.wind-rose::before {
+    content: "N";
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bold;
+}
+
+.wind-rose::after {
+    content: "S";
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bold;
+}
+
+.wind-arrow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 42px;
+    color: #ef4444;
+    transform-origin: center center;
+}
