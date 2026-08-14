@@ -4,109 +4,103 @@
   <meta charset="UTF-8">
   <title>EBCI / EBLG – Météo, vols, sonomètres</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  >
+  
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin="">
   <link rel="stylesheet" href="styles.css">
 </head>
-  
+
 <body>
+
 <header>
   <h1>EBCI / EBLG – Météo, vols, sonomètres</h1>
-  <div class="small">
-    AVWX + AirLabs • Analyse bruit • SID/STAR
-  </div>
+  <div class="small">AVWX + AirLabs • Analyse bruit • SID/STAR</div>
 </header>
+
 <main>
+
+  <!-- ===================== SIDEBAR ===================== -->
   <section id="sidebar">
 
+    <!-- ===================== BARRE ND ===================== -->
     <div class="nd-toolbar">
-  <div class="nd-title">ND CONTROL</div>
+      <div class="nd-title">ND CONTROL</div>
 
-  <div class="nd-buttons">
-    <button id="btn-ebci" class="nd-btn">
-      <span class="nd-icon">🛫</span> EBCI
-    </button>
+      <div class="nd-buttons">
+        <button id="btn-ebci" class="nd-btn">
+          <span class="nd-icon">🛫</span> EBCI
+        </button>
 
-    <button id="btn-eblg" class="nd-btn">
-      <span class="nd-icon">🛬</span> EBLG
-    </button>
+        <button id="btn-eblg" class="nd-btn">
+          <span class="nd-icon">🛬</span> EBLG
+        </button>
 
-    <button id="btn-reset" class="nd-btn">
-      <span class="nd-icon">📍</span> Recentrer
-    </button>
-  </div>
-</div>
-
-    <!-- FILTRES -->
-    <div class="meteo-buttons">
-  <button id="btn-ebci">EBCI</button>
-  <button id="btn-eblg">EBLG</button>
-  <button id="btn-reset">Recentrer</button>
-</div>
-
-    <div class="block">
-      <h2>Filtres</h2>
-      <div class="filters">
-       <div class="cockpit-toolbar">
-  <label class="cockpit-switch">
-    <input type="checkbox" id="filter-ebci" checked>
-    <span>EBCI</span>
-  </label>
-  <label class="cockpit-switch">
-    <input type="checkbox" id="filter-eblg" checked>
-    <span>EBLG</span>
-  </label>
-  <button id="btn-reset-zoom" class="cockpit-button">
-    🗺️ Recentrer
-  </button>
-</div>
+        <button id="btn-reset" class="nd-btn">
+          <span class="nd-icon">📍</span> Recentrer
+        </button>
       </div>
     </div>
-    
-    <!-- METEO -->
-<div class="block">
-  <h2>Météo</h2>
-  <div class="wind-card">
-    <h3>EBCI</h3>
-    <div class="wind-rose">
-  <div id="wind-arrow-ebci" class="wind-arrow">▲</div>
-  <div id="wind-gust-arrow-ebci" class="wind-gust-arrow"></div>
 
-  <div id="wind-avg-tag-ebci" class="wind-avg-tag"></div>
-  <div id="wind-gust-tag-ebci" class="wind-gust-tag"></div>
-</div>
+    <!-- ===================== FILTRES ===================== -->
+    <div class="block">
+      <h2>Filtres</h2>
 
-    <div id="wind-info-ebci" class="small">
-      Vent : ---
+      <div class="cockpit-toolbar">
+
+        <label class="cockpit-switch">
+          <input type="checkbox" id="filter-ebci" checked>
+          <span>EBCI</span>
+        </label>
+
+        <label class="cockpit-switch">
+          <input type="checkbox" id="filter-eblg" checked>
+          <span>EBLG</span>
+        </label>
+
+        <button id="btn-reset-zoom" class="cockpit-button">
+          🗺️ Recentrer
+        </button>
+
+      </div>
     </div>
-    <div id="meteo-details-ebci" class="small"></div>
-    <div id="meteo-ebci-summary" style="display:none"></div>
-    <div id="meteo-ebci-raw" style="display:none"></div>
-  </div>
-  <div class="wind-card">
-    <h3>EBLG</h3>
-    <div class="wind-rose">
-  <div id="wind-arrow-eblg" class="wind-arrow">▲</div>
-  <div id="wind-gust-arrow-eblg" class="wind-gust-arrow"></div>
 
-  <div id="wind-avg-tag-eblg" class="wind-avg-tag"></div>
-  <div id="wind-gust-tag-eblg" class="wind-gust-tag"></div>
-</div>
+    <!-- ===================== METEO ===================== -->
+    <div class="block">
+      <h2>Météo</h2>
 
-    <div id="wind-info-eblg" class="small">
-      Vent : ---
+      <!-- EBCI -->
+      <div class="wind-card">
+        <h3>EBCI</h3>
+
+        <div class="wind-rose">
+          <div id="wind-arrow-ebci" class="wind-arrow">▲</div>
+          <div id="wind-gust-arrow-ebci" class="wind-gust-arrow"></div>
+          <div id="wind-avg-tag-ebci" class="wind-avg-tag"></div>
+          <div id="wind-gust-tag-ebci" class="wind-gust-tag"></div>
+        </div>
+
+        <div id="wind-info-ebci" class="small">Vent : ---</div>
+        <div id="meteo-details-ebci" class="small"></div>
+      </div>
+
+      <!-- EBLG -->
+      <div class="wind-card">
+        <h3>EBLG</h3>
+
+        <div class="wind-rose">
+          <div id="wind-arrow-eblg" class="wind-arrow">▲</div>
+          <div id="wind-gust-arrow-eblg" class="wind-gust-arrow"></div>
+          <div id="wind-avg-tag-eblg" class="wind-avg-tag"></div>
+          <div id="wind-gust-tag-eblg" class="wind-gust-tag"></div>
+        </div>
+
+        <div id="wind-info-eblg" class="small">Vent : ---</div>
+        <div id="meteo-details-eblg" class="small"></div>
+      </div>
     </div>
-    <div id="meteo-details-eblg" class="small"></div>
-    <div id="meteo-eblg-summary" style="display:none"></div>
-    <div id="meteo-eblg-raw" style="display:none"></div>
-  </div>
-</div>
-    
-    <!-- PISTES -->
+
+    <!-- ===================== PISTES ===================== -->
     <div class="block">
       <h2>Pistes</h2>
       <div id="runway-ebci" class="small"></div>
@@ -114,35 +108,27 @@
         <div id="runway-eblg" class="small"></div>
       </div>
     </div>
-    <!-- SONOMETRES -->
-   <div class="legend">
-  <span>
-    <span class="dot dot-airport"></span>
-    Aéroport
-  </span>
-  <span>
-    <span class="dot dot-normal"></span>
-    Sonomètre
-  </span>
-  <span>
-    <span class="dot dot-impacted"></span>
-    Sonomètre impacté
-  </span>
-</div>
-      <div class="block">
-  <h2>Sonomètres impactés</h2>
-  <strong>EBCI</strong>
-  <div id="list-ebci" class="small">
-    En attente...
-  </div>
-  <div class="mt-035">
-    <strong>EBLG</strong>
-    <div id="list-eblg" class="small">
-      En attente...
+
+    <!-- ===================== SONOMETRES ===================== -->
+    <div class="legend">
+      <span><span class="dot dot-airport"></span> Aéroport</span>
+      <span><span class="dot dot-normal"></span> Sonomètre</span>
+      <span><span class="dot dot-impacted"></span> Sonomètre impacté</span>
     </div>
-  </div>
-</div>
-    <!-- VOLS -->
+
+    <div class="block">
+      <h2>Sonomètres impactés</h2>
+
+      <strong>EBCI</strong>
+      <div id="list-ebci" class="small">En attente...</div>
+
+      <div class="mt-035">
+        <strong>EBLG</strong>
+        <div id="list-eblg" class="small">En attente...</div>
+      </div>
+    </div>
+
+    <!-- ===================== VOLS ===================== -->
     <div class="block">
       <h2>Vols confirmés</h2>
       <div id="flights-ebci" class="small"></div>
@@ -150,23 +136,23 @@
         <div id="flights-eblg" class="small"></div>
       </div>
     </div>
-    
-    <!-- VOL -->
+
+    <!-- ===================== VOL SELECTIONNE ===================== -->
     <div class="block">
       <h2>Vol sélectionné</h2>
-      <div id="selected-flight-info"
-           class="small">
-      </div>
-      <div id="selected-flight-sonos"
-           class="small mt-035">
-      </div>
+      <div id="selected-flight-info" class="small"></div>
+      <div id="selected-flight-sonos" class="small mt-035"></div>
     </div>
+
   </section>
+
+  <!-- ===================== MAP ===================== -->
   <section id="map"></section>
+
 </main>
-<!-- Leaflet -->
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<!-- chargement app.js -->
 <script src="app.js"></script>
+
 </body>
 </html>
