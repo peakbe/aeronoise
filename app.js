@@ -563,40 +563,56 @@ function updateWindRose(airportKey, windDir, windSpeed, windGust, isVRB, avgDir)
     airportKey === "EBCI" ? "wind-avg-tag-ebci" : "wind-avg-tag-eblg"
   );
 
-  if (!arrow) return;
+  const info = document.getElementById(
+    airportKey === "EBCI" ? "wind-info-ebci" : "wind-info-eblg"
+  );
 
-  // Vent moyen
+  if (!arrow || !info) return;
+
+  /* --- Vent moyen --- */
   arrow.style.transform =
     `translate(-50%, -50%) rotate(${windDir || 0}deg)`;
 
-  // VRB → flèche pointillée
-  if (isVRB) {
-    arrow.style.border = "2px dashed #f59e0b";
-  } else {
-    arrow.style.border = "none";
-  }
+  /* VRB → flèche pointillée */
+  arrow.style.border = isVRB ? "2px dashed #f59e0b" : "none";
 
-  // Rafales
+  /* Texte vent */
+  const windSpeedMs = windSpeed != null ? (windSpeed * 0.514444).toFixed(1) : null;
+  const windGustMs  = windGust  != null ? (windGust  * 0.514444).toFixed(1) : null;
+
+  info.textContent =
+    `Vent : ${windDir ?? "--"}° / ${windSpeed ?? "--"} kt` +
+    (windSpeedMs != null ? ` (${windSpeedMs} m/s)` : "") +
+    (windGust != null ? ` | Rafales : ${windGust} kt (${windGustMs} m/s)` : "");
+
+  /* --- Rafales --- */
   if (gustArrow && windGust != null) {
     const gustColor = classifyGustColor(windGust);
     gustArrow.style.transform =
-      `translate(-50%, -50%) rotate(${windDir}deg)`;
+      `translate(-50%, -50%) rotate(${windDir || 0}deg)`;
     gustArrow.style.backgroundColor = gustColor;
     gustArrow.style.opacity = 0.85;
+  } else if (gustArrow) {
+    gustArrow.style.opacity = 0;
   }
 
-  // Tag GxxKT
+  /* --- Tag GxxKT --- */
   if (gustTag && windGust != null) {
     const gustColor = classifyGustColor(windGust);
     gustTag.textContent = `G${windGust}KT`;
     gustTag.style.color = gustColor;
+  } else if (gustTag) {
+    gustTag.textContent = "";
   }
 
-  // Direction moyenne
+  /* --- Direction moyenne --- */
   if (avgTag && avgDir != null) {
     avgTag.textContent = `${avgDir}°`;
+  } else if (avgTag) {
+    avgTag.textContent = "";
   }
 }
+
 
 
 function updateWeatherDetails(airportKey, metar) {
