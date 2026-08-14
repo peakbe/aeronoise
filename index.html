@@ -66,16 +66,47 @@
 
       <h2>Météo</h2>
 
-      <strong>EBCI</strong>
-      <div id="meteo-ebci-summary" class="small"></div>
-      <div id="meteo-ebci-raw" class="metar"></div>
+      <h3>EBCI</h3>
+      <div id="metartaf-ebci"></div>
 
       <div class="mt-05">
-        <strong>EBLG</strong>
-        <div id="meteo-eblg-summary" class="small"></div>
-        <div id="meteo-eblg-raw" class="metar"></div>
-      </div>
 
+  f.com/fr/metar/EBCI"
+    id="metartaf-ebci"
+    style="
+      font-size:18px;
+      font-weight:500;
+      color:#000;
+      width:300px;
+      height:435px;
+      display:block;
+    ">
+    METAR Brussels South Charleroi Airport
+  </a>
+
+</div>
+      
+      <h3>EBLG</h3>
+      <div id="metartaf-eblg"></div>
+
+      <div class="mt-05">
+
+  <a
+    href="https://metar-taf.com/fr/metar/EBLG"
+    id="metartaf-eblg"
+    style="
+      font-size:18px;
+      font-weight:500;
+      color:#000;
+      width:300px;
+      height:435px;
+      display:block;
+    ">
+    METAR Liège Airport
+  </a>
+
+</div>
+      
     </div>
 
     <!-- PISTES -->
@@ -196,6 +227,22 @@
 <!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+// météo metar - taf - ebci
+<script
+  async
+  defer
+  crossorigin="anonymous"
+  src="https://metar-taf.com/fr/embed-js/EBCI?qnh=hPa&rh=rh&target=metart
+
+// météo metar - taf eblg
+<script
+  async
+  defer
+  crossorigin="anonymous"
+  src="https://metar-taf.com/fr/embed-js/EBLG?qnh=hPa&rh=rh&target=metartaf-eblg">
+</script>
+
+// chargement app.js  
 <script src="app.js"></script>
 
 </body>
