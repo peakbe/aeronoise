@@ -252,4 +252,27 @@ button {
     font-size: 42px;
     color: #ef4444;
     transform-origin: center center;
+  
+  // Afficher tous les sonomètres avec un point coloré.
+}
+.sono-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0;
+}
+
+.sono-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.sono-dot.normal {
+  background: #2563eb;
+}
+
+.sono-dot.impacted {
+  background: #b91c1c;
 }
