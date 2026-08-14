@@ -1329,24 +1329,69 @@ const DISPLAY_RULES = {
           corridorLayers[airportKey] = null;
         }
       }
-    } catch (e) {
-      console.error(e);
-      const idSummary = airportKey === "EBCI" ? "meteo-ebci-summary" : "meteo-eblg-summary";
-      const idRaw = airportKey === "EBCI" ? "meteo-ebci-raw" : "meteo-eblg-raw";
-      document.getElementById(idSummary).textContent = "Erreur lors du chargement des données.";
-      document.getElementById(idRaw).textContent = "";
-      const runwayId = airportKey === "EBCI" ? "runway-ebci" : "runway-eblg";
-      const listId = airportKey === "EBCI" ? "list-ebci" : "list-eblg";
-      const flightsId = airportKey === "EBCI" ? "flights-ebci" : "flights-eblg";
-      document.getElementById(runwayId).textContent = "Impossible de déterminer la piste.";
-      document.getElementById(listId).textContent = "Données indisponibles.";
-      document.getElementById(flightsId).textContent = "Données vols indisponibles.";
-      sonometerMarkers[airportKey].forEach(s => s.marker.setStyle(sonometerNormalStyle));
-      if (corridorLayers[airportKey]) {
-        map.removeLayer(corridorLayers[airportKey]);
-        corridorLayers[airportKey] = null;
-      }
-    }
+   } catch (e) {
+
+  console.error(e);
+
+  const idSummary =
+    airportKey === "EBCI"
+      ? "meteo-ebci-summary"
+      : "meteo-eblg-summary";
+
+  const idRaw =
+    airportKey === "EBCI"
+      ? "meteo-ebci-raw"
+      : "meteo-eblg-raw";
+
+  const runwayId =
+    airportKey === "EBCI"
+      ? "runway-ebci"
+      : "runway-eblg";
+
+  const listId =
+    airportKey === "EBCI"
+      ? "list-ebci"
+      : "list-eblg";
+
+  const flightsId =
+    airportKey === "EBCI"
+      ? "flights-ebci"
+      : "flights-eblg";
+
+  const summaryEl = document.getElementById(idSummary);
+  const rawEl = document.getElementById(idRaw);
+  const runwayEl = document.getElementById(runwayId);
+  const listEl = document.getElementById(listId);
+  const flightsEl = document.getElementById(flightsId);
+
+  if (summaryEl)
+    summaryEl.textContent =
+      "Erreur lors du chargement des données.";
+
+  if (rawEl)
+    rawEl.textContent = "";
+
+  if (runwayEl)
+    runwayEl.textContent =
+      "Impossible de déterminer la piste.";
+
+  if (listEl)
+    listEl.textContent =
+      "Données indisponibles.";
+
+  if (flightsEl)
+    flightsEl.textContent =
+      "Données vols indisponibles.";
+
+  sonometerMarkers[airportKey].forEach(s =>
+    s.marker.setStyle(sonometerNormalStyle)
+  );
+
+  if (corridorLayers[airportKey]) {
+    map.removeLayer(corridorLayers[airportKey]);
+    corridorLayers[airportKey] = null;
+  }
+}
   }
 
   async function refreshAll() {
