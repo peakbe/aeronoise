@@ -650,7 +650,13 @@ function updateWeatherDetails(
     metar?.wind_speed?.value ??
     metar?.wind?.speed_kt;
 
+  const windSpeedMs =
+    windSpeed != null
+      ? (windSpeed * 0.514444).toFixed(1)
+      : null;
+
   const airport = airports[airportKey];
+
   const runway =
     estimateRunwayFromWind(
       airport,
@@ -671,20 +677,22 @@ function updateWeatherDetails(
     if (comp) {
 
       runwayInfo = `
-        <br>Vent de travers RWY ${runway.name} :
-        ${comp.crosswind} kt
-        <br>Vent de face RWY ${runway.name} :
-        ${comp.headwind} kt
+        <br>🛬 Piste estimée : RWY ${runway.name}
+        <br>💨 Vent : ${windSpeed ?? "--"} kt (${windSpeedMs ?? "--"} m/s)
+        <br>↔ Vent de travers : ${comp.crosswind} kt
+        <br>↕ Vent de face : ${comp.headwind} kt
       `;
     }
   }
 
-  el.innerHTML =
-    `Température : ${temp ?? "--"} °C
-     <br>Point de rosée : ${dew ?? "--"} °C
-     <br>QNH : ${qnh ?? "--"} hPa
-     ${runwayInfo}
-     <br>Tendance : ${trend}`;
+  el.innerHTML = `
+    <strong>Conditions actuelles</strong>
+    <br>🌡 Température : ${temp ?? "--"} °C
+    <br>💧 Point de rosée : ${dew ?? "--"} °C
+    <br>📈 QNH : ${qnh ?? "--"} hPa
+    ${runwayInfo}
+    <br>📝 Tendance : ${trend}
+  `;
 }
 
   function estimateRunwayFromWind(airport, windDirDeg) {
