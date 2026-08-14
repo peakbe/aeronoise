@@ -496,7 +496,11 @@ function applyDisplayRules(airportKey, runwayName) {
     const idSummary = airportKey === "EBCI" ? "meteo-ebci-summary" : "meteo-eblg-summary";
     const idRaw = airportKey === "EBCI" ? "meteo-ebci-raw" : "meteo-eblg-raw";
     const elSummary = document.getElementById(idSummary);
-    const elRaw = document.getElementById(idRaw);
+const elRaw = document.getElementById(idRaw);
+
+if (!elSummary || !elRaw) {
+  return;
+}
 
     const windDir = metar?.wind_direction?.value ?? metar?.wind?.direction?.degrees ?? null;
     const windSpeed = metar?.wind_speed?.value ?? metar?.wind?.speed_kt ?? null;
