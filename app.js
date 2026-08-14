@@ -927,7 +927,7 @@ const DISPLAY_RULES = {
     }
     el.textContent =
       `Vent ${windDir != null ? windDir + "°" : "n/a"} / ${windSpeed ?? "?"} kt – ` +
-      `piste ${runway.name} (cap ~${runway.heading}°) [${source}, vols filtrés: ${flightsCount}].`;
+      `piste ${runway?.name} (cap ~${runway.heading}°) [${source}, vols filtrés: ${flightsCount}].`;
   }
 
   function updateImpactedListUI(airportKey, impacted, runway, usedFixedRule = false) {
@@ -938,7 +938,7 @@ const DISPLAY_RULES = {
       return;
     }
     if (impacted.length === 0) {
-      container.textContent = `Aucun sonomètre dans le couloir (piste ${runway.name}).`;
+      container.textContent = `Aucun sonomètre dans le couloir (piste ${runway?.name}).`;
       return;
     }
 
@@ -979,7 +979,7 @@ const sorted =
   .getElementById("btn-reset-zoom")
   .addEventListener("click", resetMapView);  
     container.innerHTML =
-      `Piste : <strong>${runway.name}</strong> (trapèze 20 km, largeur dynamique)<br>` +
+      `Piste : <strong>${runway?.name}</strong> (trapèze 20 km, largeur dynamique)<br>` +
       impacted
         .map(s =>
           `<span style="
@@ -1072,7 +1072,7 @@ const sorted =
         flight: f,
         depMin: toMinutes(dep),
         arrMin: toMinutes(arr),
-        runwayName: runway ? runway.name : (f.runway ? String(f.runway) : null),
+        runwayName: runway ? runway?.name : (f.runway ? String(f.runway) : null),
         mode
       };
     });
@@ -1359,22 +1359,24 @@ const sorted =
       }
 
       updateRunwayUI(airportKey, runway, windDir, windSpeed, source, flightsFiltered.length);
-      applyDisplayRules(
-  airportKey,
-  runway.name
-);
+     
       
       if (runway) {
+
+         applyDisplayRules(
+  airportKey,
+  runway?.name
+);
         let mode = "DEP";
         if (flightsFiltered.some(f => f._kind === "liveArr")) mode = "ARR";
 
-        activateSidStar(airportKey, runway.name, mode);
+        activateSidStar(airportKey, runway?.name, mode);
 
         let usedFixedRule = false;
         let impacted = [];
 
         if (airportKey === "EBLG") {
-          const fixed = getFixedRuleImpactsEBLG(runway.name, mode);
+          const fixed = getFixedRuleImpactsEBLG(runway?.name, mode);
           if (fixed) {
             usedFixedRule = true;
             impacted = sonometerMarkers[airportKey]
@@ -1394,7 +1396,7 @@ const sorted =
         }
 
         if (!usedFixedRule && airportKey === "EBCI") {
-          const fixed = getFixedRuleImpactsEBCI(runway.name, mode);
+          const fixed = getFixedRuleImpactsEBCI(runway?.name, mode);
           if (fixed) {
             usedFixedRule = true;
             impacted = sonometerMarkers[airportKey]
