@@ -619,7 +619,13 @@ function updateWeatherDetails(airportKey, metar) {
     airportKey === "EBCI" ? "meteo-details-ebci" : "meteo-details-eblg"
   );
   if (!el) return;
-
+  
+console.log(
+  "DETAIL",
+  airportKey,
+  metar
+);
+``
   // --- Extraction METAR ---
   const temp = metar?.temperature?.value ?? metar?.temperature?.celsius;
   const dew  = metar?.dewpoint?.value    ?? metar?.dewpoint?.celsius;
@@ -673,6 +679,11 @@ function updateWeatherDetails(airportKey, metar) {
     `;
   }
 
+  console.log(
+  "WRITE",
+  airportKey
+);
+  
   // --- Affichage final ---
   el.innerHTML = `
     <strong>Conditions actuelles</strong>
